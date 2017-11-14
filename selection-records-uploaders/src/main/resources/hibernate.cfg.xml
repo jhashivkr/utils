@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+	<session-factory>
+		<!-- <property name="hibernate.dialect">org.hibernate.dialect.OracleDialect</property> 
+			<property name="hibernate.connection.driver_class">oracle.jdbc.OracleDriver</property> 
+			<property name="hibernate.connection.url">jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=lvicoraracd01-vip.ingramcontent.com)(PORT=1521))(ADDRESS=(PROTOCOL=TCP)(HOST=lvicoraracd02-vip.ingramcontent.com)(PORT=1521))(LOAD_BALANCE=yes)(FAILOVER=ON))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=ORDEV_WAS_TAF.ingramtest.com)))</property> 
+			<property name="hibernate.connection.username">eb_user</property> <property 
+			name="hibernate.connection.password">eb_user</property> <property name="hibernate.show_sql">true</property> 
+			<property name="hibernate.current_session_context_class">thread</property> -->
+
+		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+		<!-- property name="hibernate.connection.url">jdbc:mysql://localhost:3306/hibernate_tutorial</property -->
+		<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/eb</property>
+		<property name="hibernate.connection.username">root</property>
+		<property name="hibernate.connection.password">shiv</property>
+
+		<!-- SQL dialect -->
+		<property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+
+		<!-- JDBC connection pool (use the built-in) -->
+		<property name="connection.pool_size">1</property>
+
+		<!-- Enable Hibernate's automatic session context management -->
+		<property name="current_session_context_class">thread</property>
+
+		<!-- Disable the second-level cache -->
+		<property name="cache.provider_class">org.hibernate.cache.internal.NoCacheProvider</property>
+
+		<!-- Echo all executed SQL to stdout -->
+		<property name="show_sql">false</property>
+
+		<!-- Drop and re-create the database schema on startup -->
+		<!-- property name="hbm2ddl.auto">update</property -->
+
+		<mapping resource="com/ibg/selectionrecords/pojo/AcdmItemHistory.hbm.xml" />
+		<mapping resource="com/ibg/selectionrecords/pojo/AcdmListItem.hbm.xml" />
+		<mapping
+			resource="com/ibg/selectionrecords/pojo/AcdmOrderInfoTemplateData.hbm.xml" />
+		<mapping resource="com/ibg/selectionrecords/pojo/AcdmOrderInfoTemplate.hbm.xml" />
+		<mapping resource="com/ibg/selectionrecords/pojo/AcdmOriginalOrderInfo.hbm.xml" />
+		<mapping resource="com/ibg/selectionrecords/pojo/AcdmExtnlUser.hbm.xml" />
+		<mapping resource="com/ibg/selectionrecords/pojo/CisCustomer.hbm.xml" />
+		<mapping resource="com/ibg/selectionrecords/pojo/CisUser.hbm.xml" />
+		<mapping
+			resource="com/ibg/selectionrecords/pojo/AcdmExternalPartReservation.hbm.xml" />
+		<mapping resource="com/ibg/selectionrecords/pojo/AcdmMarkAll.hbm.xml" />
+		<mapping resource="com/ibg/selectionrecords/pojo/AcdmListTp.hbm.xml" />
+		<mapping resource="com/ibg/selectionrecords/pojo/CisCustGroup.hbm.xml" />
+		<mapping resource="com/ibg/selectionrecords/pojo/AplcUser.hbm.xml" />
+		<mapping resource="com/ibg/selectionrecords/pojo/AcdmList.hbm.xml" />
+	</session-factory>
+</hibernate-configuration>

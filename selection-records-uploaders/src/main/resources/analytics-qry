@@ -1,0 +1,2 @@
+select list.user_ownr_id, list.list_tp_id,count(item.list_id) from acdm_list_item item, acdm_list list 
+where item.list_id = list.list_id and list.lib_grp='0001' group by item.list_id, list.list_tp_id,list.user_ownr_id order by list.user_ownr_id,list.list_tp_id

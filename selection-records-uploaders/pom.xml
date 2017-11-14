@@ -1,0 +1,307 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.ibg.upload</groupId>
+	<artifactId>selection-record-uploaders</artifactId>
+	<version>1.0</version>
+	<packaging>jar</packaging>
+
+	<name>selection-record-uploaders</name>
+	<url>http://maven.apache.org</url>
+
+	<properties>
+
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.javadoc.reporting.version>2.7</maven.javadoc.reporting.version>
+		<releaseCandidate>1</releaseCandidate>
+
+		<commons.logging.version>1.1.1</commons.logging.version>
+		<log4j.version>1.2.16</log4j.version>
+		<slf4j.version>1.7.5</slf4j.version>
+
+		<!-- Spring -->
+		<!-- spring.version>3.2.1.RELEASE</spring.version-->
+		<spring.version>4.1.6.RELEASE</spring.version>
+
+		<!-- AspectJ -->
+		<aspectj.version>1.7.4</aspectj.version>
+
+		<!-- activeJdbc -->
+		<activejdbc.version>1.4.9</activejdbc.version>
+
+		<!-- Web -->
+		<jsp.version>2.2</jsp.version>
+		<jstl.version>1.2</jstl.version>
+		<servlet.version>2.5</servlet.version>
+
+	</properties>
+
+
+
+
+	<build>
+		<plugins>
+
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>create-executable-jar</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<descriptorRefs>
+								<descriptorRef>jar-with-dependencies</descriptorRef>
+							</descriptorRefs>
+							<archive>
+								<manifest>
+									<mainClass>com.ibg.file.loader.LoaderScheduler</mainClass>
+									<packageName>com.ibg.file.loader.LoaderScheduler</packageName>
+								</manifest>
+							</archive>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-jar-plugin</artifactId> 
+				<version>2.4</version> <configuration> <archive> <index>true</index> <manifest> 
+				<addClasspath>true</addClasspath> <mainClass>com.ibg.file.loader.LoaderScheduler</mainClass> 
+				</manifest> <manifestEntries> <mode>development</mode> <url>${pom.url}</url> 
+				<key>value</key> </manifestEntries> </archive> </configuration> </plugin> -->
+
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+					<fork>true</fork>
+					<meminitial>512m</meminitial>
+					<maxmem>1024m</maxmem>
+				</configuration>
+			</plugin>
+
+			<!-- -->
+
+			<plugin>
+				<groupId>org.javalite</groupId>
+				<artifactId>activejdbc-instrumentation</artifactId>
+				<version>${activejdbc.version}</version>
+				<executions>
+					<execution>
+						<phase>process-classes</phase>
+						<goals>
+							<goal>instrument</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.javalite</groupId>
+										<artifactId>
+											activejdbc-instrumentation
+										</artifactId>
+										<versionRange>
+											[1.4.8,1.4.9,)
+										</versionRange>
+										<goals>
+											<goal>instrument</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+	<dependencies>
+
+
+
+		<!-- Because this is a web app, we also have a dependency on the servlet 
+			api. -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>${servlet.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>2.2.3</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.2.3</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<version>2.2.3</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.oracle</groupId>
+			<artifactId>ojdbc6</artifactId>
+			<version>11.2.0.1.0</version>
+		</dependency>
+
+		<!-- <dependency> <groupId>mysql</groupId> <artifactId>mysql-connector-java</artifactId> 
+			<version>5.1.6</version> </dependency> <dependency> <groupId>org.mongodb</groupId> 
+			<artifactId>mongo-java-driver</artifactId> <version>2.11.3</version> </dependency> -->
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>${log4j.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.codehaus.jettison</groupId>
+			<artifactId>jettison</artifactId>
+			<version>1.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.3</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-net</groupId>
+			<artifactId>commons-net</artifactId>
+			<version>3.1</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aop</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aspects</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-expression</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<!-- AspectJ dependencies -->
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjrt</artifactId>
+			<version>${aspectj.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjtools</artifactId>
+			<version>${aspectj.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-dbcp</groupId>
+			<artifactId>commons-dbcp</artifactId>
+			<version>1.4</version>
+		</dependency>
+
+
+
+		<dependency>
+			<groupId>javax.transaction</groupId>
+			<artifactId>jta</artifactId>
+			<version>1.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.javalite</groupId>
+			<artifactId>activejdbc</artifactId>
+			<version>${activejdbc.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>opensymphony</groupId>
+					<artifactId>oscache</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.8.2</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+	<groupId>org.apache.solr</groupId>
+	<artifactId>solr-solrj</artifactId>
+	<version>4.4.0</version>
+</dependency>
+		
+	</dependencies>
+
+
+</project>

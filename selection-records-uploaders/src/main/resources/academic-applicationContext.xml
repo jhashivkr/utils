@@ -1,0 +1,228 @@
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:lang="http://www.springframework.org/schema/lang" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd 
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+	http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-3.0.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd 
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+
+	<!-- property configure -->
+	<context:property-placeholder location="classpath:variabledata.properties" />
+
+	<bean id="oracleDataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close" p:driverClassName="${oracleDriver}" p:url="${oracleURL}"
+		p:username="${oracleUserName}" p:password="${oraclePasswd}" lazy-init="true">
+	</bean>
+	<context:annotation-config />
+
+	<bean id="qaoracleDataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close" p:driverClassName="${qaoracleDriver}" p:url="${qaoracleURL}"
+		p:username="${qaoracleUserName}" p:password="${qaoraclePasswd}"
+		lazy-init="true">
+	</bean>
+	<context:annotation-config />
+
+	<bean id="stageoracleDataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close" p:driverClassName="${stageoracleDriver}" p:url="${stageoracleURL}"
+		p:username="${stageoracleUserName}" p:password="${stageoraclePasswd}"
+		lazy-init="true">
+	</bean>
+	<context:annotation-config />
+
+	<!-- Scan class path for annotations (eg: @Service, @Repository etc) -->
+	<context:component-scan base-package="com.ibg.db.*" />
+	<context:component-scan base-package="com.ibg.parsers.json.*" />
+	<context:component-scan base-package="com.ibg.parsers.txt*" />
+	<context:component-scan base-package="com.ibg.utils.*" />
+
+	<bean id="serviceLocator" class="com.ibg.db.ServiceLocator" />
+
+	<bean id="productDAO" class="com.ibg.db.JdbcProductDAO" lazy-init="true">
+		<property name="dataSource" ref="oracleDataSource" />
+	</bean>
+
+	<!-- bean id="activeJdbcCon" class="com.ibg.datasource.ActiveJdbcCon" scope="singleton" 
+		/ -->
+
+	<!-- property name="dataSource" ref="qaoracleDataSource" / -->
+
+
+	<bean id="activeJdbcConClose" class="com.ibg.datasource.ActiveJdbcConClose" />
+	<!-- <bean id="listMasterFile" class="java.io.FileReader" scope="singleton" 
+		lazy-init="true"> <constructor-arg value="${listMasterFlatFile}"></constructor-arg> 
+		</bean> <bean id="listMasterFileBuffer" class="java.io.BufferedReader" scope="singleton" 
+		lazy-init="true"> <constructor-arg ref="listMasterFile"></constructor-arg> 
+		</bean> <bean id="listParser" class="com.ibg.parsers.txt.ListMasterParser" 
+		scope="singleton" lazy-init="true"> <property name="bufferReader" ref="listMasterFileBuffer" 
+		/> </bean> <bean id="jsonFile" class="java.io.File" scope="singleton" lazy-init="true"> 
+		<constructor-arg value="${jsonFile}" /> </bean> -->
+	<bean id="jsonFactory" class="com.fasterxml.jackson.core.JsonFactory"
+		scope="singleton" lazy-init="true" />
+
+	<bean id="selRecRdrFileFactory" class="com.ibg.parsers.json.SelectionRecordReader"
+		scope="singleton" lazy-init="true">
+		<constructor-arg ref="jsonFile" />
+		<constructor-arg ref="jsonFactory" />
+	</bean>
+
+	<bean id="selRecRdr" class="com.ibg.parsers.json.SelectionRecordReader"
+		scope="singleton" lazy-init="true">
+		<constructor-arg ref="jsonFactory" />
+	</bean>
+
+	<bean id="jsonObjMapper" class="com.fasterxml.jackson.databind.ObjectMapper"
+		scope="prototype" lazy-init="true" />
+
+
+	<bean id="propertyReader" class="com.ibg.utils.PropertyReader" />
+
+	<bean id="newJsonCollector" class="com.ibg.file.loader.CollectJsonFiles"
+		scope="singleton" lazy-init="true" />
+	<bean id="errorJsonCollector" class="com.ibg.file.loader.CollectErrorJsonFiles"
+		scope="singleton" lazy-init="true" />
+
+	<bean id="errorAnalyzeService" class="com.ibg.data.uploaders.ErrorAnalyzerService"
+		scope="singleton" lazy-init="true">
+		<property name="selRecRdr" ref="selRecRdr" />
+		<property name="errorSelRecRdr" ref="selRecRdr" />
+		<property name="errorJsonFiles" ref="errorJsonCollector" />
+		<property name="jsonFiles" ref="newJsonCollector" />
+	</bean>
+
+
+	<!-- solr api conf starts -->
+	<bean id="solrServerFactory" class="com.ibg.test.SolrJServerFactory"
+		scope="prototype">
+		<constructor-arg index="0" type="String" value="${SOLR_CORE_IPAGE}" />
+		<constructor-arg index="1" type="String"
+			value="${SEARCH_ENGINE_HOST}" />
+		<constructor-arg index="2" type="int"
+			value="${SEARCH_ENGINE_PORT}" />
+		<constructor-arg index="3" type="int" value="${SOLR_QUERY_MAX_MS}" />
+	</bean>
+
+	<bean id="solrRecRdr" class="com.ibg.solr.json.SolrResponseReader"
+		scope="singleton" lazy-init="true">
+		<constructor-arg ref="jsonFactory" />
+	</bean>
+
+	<bean id="solrRespWorker" class="com.ibg.solr.json.SolrResponseWorker"
+		scope="singleton" lazy-init="true">
+		<constructor-arg ref="solrRecRdr" />
+	</bean>
+
+	<!-- loader beans -->
+	<bean id="_arlg" class="com.ibg.data.uploaders.AcdmCustomerGroupUploader"
+		scope="singleton" lazy-init="true" />
+
+	<bean id="_arcust" class="com.ibg.data.uploaders.AcdmCustomerUploader"
+		scope="singleton" lazy-init="true" />
+
+	<bean id="_sfcontact" class="com.ibg.data.uploaders.AcdmUsersUploader"
+		scope="singleton" lazy-init="true" />
+	
+	<bean id="_sfcontactDownload" class="com.ibg.data.downloaders.AcdmUsersDownloader"
+		scope="singleton" lazy-init="true" />
+
+	<bean id="_opaplst" class="com.ibg.data.uploaders.AcdmListUploader"
+		scope="singleton" lazy-init="true" />
+	
+	<bean id="_opaplstDownload" class="com.ibg.data.downloaders.AcdmListDownloader"
+		scope="singleton" lazy-init="true" />	
+
+	<bean id="_pref" class="com.ibg.data.uploaders.AcdmUserPreferencesUploader"
+		scope="singleton" lazy-init="true" />
+
+	<bean id="_excel" class="com.ibg.data.uploaders.AcdmListUploaderActiveJdbc"
+		scope="singleton" lazy-init="true" />
+
+	<bean id="_orderinfo" class="com.ibg.data.uploaders.AcdmOrderInfoTemplateUploader"
+		scope="singleton" lazy-init="true" />
+	
+	<bean id="selRecUploadMgr" class="com.ibg.data.uploaders.SelectionRecUploadMgr"
+		scope="singleton" lazy-init="true">
+		<constructor-arg ref="selRecRdr" />
+		<constructor-arg ref="newJsonCollector" />
+	</bean>
+
+	<!-- use this when u have all the json files collected -->
+	<bean id="selRecordUpldMgr" class="com.ibg.data.uploaders.SelectionRecUploadMgr"
+		scope="singleton" lazy-init="true">
+		<constructor-arg ref="selRecRdr" />
+	</bean>
+
+	<bean id="flatFileParser" class="com.ibg.parsers.flat.FlatFileParser"
+		scope="singleton" lazy-init="true" />
+
+
+	<bean id="flatFileProps" class="com.ibg.utils.FlatFileProps">
+		<property name="fldsList">
+			<map>
+				<entry key="_arlg" value="${_arlg}" />
+				<entry key="_arcust" value="${_arcust}" />
+				<entry key="_sfcontact" value="${_sfcontact}" />
+				<entry key="_opaplst" value="${_opaplst}" />
+				<entry key="_pref" value="${_pref}" />
+				<entry key="_orderinfo" value="${_orderinfo}" />
+				<entry key="_lc" value="${_lc}" />
+				<entry key="_dy" value="${_dy}" />
+				<!-- entry key="_excel" value="${_excel}" / -->
+			</map>
+		</property>
+	</bean>
+
+	<bean id="dbEnv" class="com.ibg.datasource.DBEnvConnections">
+		<property name="connList">
+			<map>
+				<entry key="ordev">
+					<bean class="org.apache.commons.dbcp.BasicDataSource">
+						<property name="driverClassName" value="${oracleDriver}" />
+						<property name="url" value="${oracleURL}" />
+						<property name="username" value="${oracleUserName}" />
+						<property name="password" value="${oraclePasswd}" />
+					</bean>
+				</entry>
+				<entry key="orqa">
+					<bean class="org.apache.commons.dbcp.BasicDataSource">
+						<property name="driverClassName" value="${oracleDriver}" />
+						<property name="url" value="${qaoracleURL}" />
+						<property name="username" value="${qaoracleUserName}" />
+						<property name="password" value="${qaoraclePasswd}" />
+					</bean>
+				</entry>
+
+				<entry key="orstage">
+					<bean class="org.apache.commons.dbcp.BasicDataSource">
+						<property name="driverClassName" value="${oracleDriver}" />
+						<property name="url" value="${stageoracleURL}" />
+						<property name="username" value="${stageoracleUserName}" />
+						<property name="password" value="${stageoraclePasswd}" />
+					</bean>
+				</entry>
+				<entry key="orp">
+					<bean class="org.apache.commons.dbcp.BasicDataSource">
+						<property name="driverClassName" value="${prodoracleDriver}" />
+						<property name="url" value="${prodoracleURL}" />
+						<property name="username" value="${prodoracleUserName}" />
+						<property name="password" value="${prodoraclePasswd}" />
+					</bean>
+				</entry>
+
+			</map>
+		</property>
+	</bean>
+
+	<!-- schedulers -->
+
+	<bean id="jsonLoader" class="com.ibg.file.loader.JsonLoaderScheduler"
+		scope="singleton" lazy-init="true" />
+
+	<bean id="flatLoader" class="com.ibg.file.loader.FlatLoaderScheduler"
+		scope="singleton" lazy-init="true" />
+
+</beans>

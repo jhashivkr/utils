@@ -1,0 +1,82 @@
+
+use when want to delete all before a load
+-----------------------------------------
+delete from aplc_acct where MKT_SGMT_CD='ACDM'
+delete from APLC_USER_ROLE a WHERE a.user_id in(select b.user_id from APLC_USER b WHERE b.CIS_user_ind = 'Y');
+delete from APLC_USER WHERE CIS_user_ind = 'Y';
+delete from CIS_CUSTOMER
+delete from CIS_CUST_GROUP
+
+delete from ACDM_ITEM_HISTORY
+delete from ACDM_LIST_ORDER_INFO
+delete from ACDM_ORIGINAL_ORDER_INFO
+delete from ACDM_USER_PREF
+delete from ACDM_EXTERNAL_PART_RESERVATION;
+delete from APLC_USER_ROLE WHERE user_id in(select user_id from APLC_USER WHERE CIS_user_ind = 'Y');
+delete from APLC_USER WHERE CIS_user_ind = 'Y';
+delete from ACDM_LIST_ITEM
+delete from ACDM_LIST
+
+queries to be performed before inserting data or one lib group
+----------------------------------------------------------------
+//only administrator goes into aplc_acct
+delete from aplc_acct a where a.MKT_SGMT_CD='ACDM'and a.user_ownr_id='<user id>'
+
+//all users goes into this table and gets a role_nbr
+delete from APLC_USER_ROLE a WHERE a.user_id = '<user id>' and a.user_id in (select b.user_id from APLC_USER b WHERE b.CIS_user_ind = 'Y');
+
+//all user goes into this table
+delete from APLC_USER a WHERE a.user_id='<user id>' and a.CIS_user_ind = 'Y';
+
+//only customer group information goes here
+delete from CIS_CUSTOMER c where c.CUST_GROUP='<customer group>'
+
+//only customer information goes here
+delete from CIS_CUST_GROUP c where c.CUST_GROUP='<customer group>'
+
+//only user information goes here
+delete from CIS_USER c where c.USER_ID='<user_id>'
+
+//all records for the current processing user - ACDM_USER_PREF
+delete from ACDM_USER_PREF where lower(l.user_id) = lower('<user_id>')
+
+//all records for the current processing user - ACDM_EXTERNAL_PART_RESERVATION
+delete from ACDM_EXTERNAL_PART_RESERVATION e where e.list_id in (select l.list_id from acdm_list l where lower(l.user_ownr_id) = lower('<user_id>')
+
+//all records for the current processing user  - ACDM_ORIGINAL_ORDER_INFO
+delete from ACDM_ORIGINAL_ORDER_INFO o where o.list_id in (select l.list_id from acdm_list l where lower(l.user_ownr_id) =lower('<user_id>')
+
+//all records for the current processing user - ACDM_LIST_ORDER_INFO
+delete from ACDM_LIST_ORDER_INFO o where o.list_id in (select l.list_id from acdm_list l where lower(l.user_ownr_id) = lower('<user_id>')
+
+//all records for the current processing user - ACDM_ITEM_HISTORY
+delete from ACDM_ITEM_HISTORY h where h.opr_id in (select i.opr_id from acdm_list_item i, acdm_list l where i.list_id = l.list_id and lower(l.user_ownr_id) =lower('<user_id>')
+
+//all records for the current processing user - acdm_list_item
+delete from acdm_list_item i where i.list_id in (select l.list_id from acdm_list l where lower(l.user_ownr_id) = lower('<user_id>')
+
+//all records for the current processing user - acdm_list
+delete from acdm_list l where lower(l.user_ownr_id) = lower('<user_id>')
+
+-----------------------------------------------------------
+select * from ACDM_EXTERNAL_PART_RESERVATION e, acdm_list l where e.list_id = l.list_id and l.user_ownr_id='CROSSIN'
+select * from ACDM_ORIGINAL_ORDER_INFO o, acdm_list l where o.list_id = l.list_id and l.user_ownr_id='CROSSIN'
+select * from ACDM_LIST_ORDER_INFO o, acdm_list_item i, acdm_list l where i.list_id = l.list_id and o.opr_id = i.opr_id and o.list_id = l.list_id and l.user_ownr_id='CROSSIN'
+select * from ACDM_ITEM_HISTORY h, acdm_list_item i, acdm_list l where i.list_id = l.list_id and h.opr_id = i.opr_id and l.user_ownr_id='CROSSIN'
+select * from acdm_list_item i, acdm_list l where i.list_id = l.list_id and l.user_ownr_id='CROSSIN'
+select * from acdm_list where user_ownr_id='CROSSIN'
+
+|
+|
+same as 
+|
+|
+
+select * from ACDM_EXTERNAL_PART_RESERVATION e where e.list_id in (select l.list_id from acdm_list l where lower(l.user_ownr_id) = lower('<user_id>')
+select * from ACDM_ORIGINAL_ORDER_INFO o where o.list_id in (select l.list_id from acdm_list l where lower(l.user_ownr_id) =lower('<user_id>')
+select * from ACDM_LIST_ORDER_INFO o where o.list_id in (select l.list_id from acdm_list l where lower(l.user_ownr_id) = lower('<user_id>')
+select * from ACDM_ITEM_HISTORY h where h.opr_id in (select i.opr_id from acdm_list_item i, acdm_list l where i.list_id = l.list_id and lower(l.user_ownr_id) =lower('<user_id>')
+select * from acdm_list_item i where i.list_id in (select l.list_id from acdm_list l where lower(l.user_ownr_id) = lower('<user_id>')
+select * from acdm_list l where lower(l.user_ownr_id) = lower('CROSSIN')
+
+commit

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+ This configuration file shows a host endpoint description as expected by LegStar.
+ The description can be any text you please.
+  -->
+<config description="Default Configuration">
+  <!-- 
+   The enpoints section can contain any number of endpoints definitions.
+    -->
+  <hostEndPoints>
+    <!-- 
+     The endpoint name identifies this particular host configuration. The endpoint
+     name is used by clients to logically refer to a particular target host configuration.
+      -->
+    <hostEndPoint name="TheMainframe">
+    
+      <!--  The host access strategy, either direct or pooled. If pooled is chosen
+            other engine related entries in the configuration file are needed
+            (see commented lines below)    -->
+      <hostAccessStrategy>direct</hostAccessStrategy>
+
+      <!--  Used when pooling:
+            The number of simultaneous connections to the host. This number needs to
+            be reasonably small in order to prevent any flooding of the host system.-->
+      <!-- hostConnectionPoolSize>15</hostConnectionPoolSize --> 
+      
+      <!--  Used when pooling:
+            This is the maximum time (in millisecs) a pooled connection will wait
+            for a reply from the host.-->
+      <!-- pooledInvokeTimeout>300000</pooledInvokeTimeout -->
+     
+      <!--  The connection factory provides a transport implementation.  -->
+      <hostConnectionfactoryClass>com.legstar.csok.client.CicsSocketConnectionFactory</hostConnectionfactoryClass>
+      
+      <!--  The host TCPIP address if needed by the transport.  -->
+      <hostIPAddress>nashvile.ingrambook.com</hostIPAddress>
+      
+      <!--  The host TCPIP port number if needed by the transport.  -->
+      <hostIPPort>5650</hostIPPort>
+      
+      <!--  The host character set is used to translate from unicode.  -->
+      <hostCharset>IBM01140</hostCharset>
+      
+      <!--  If this is specified, all clients might be identified as the same host user.  -->
+      <hostUserID>EBUPD</hostUserID>
+      
+      <!--  If this is specified, clients will not have to provide host credentials.  -->
+      <hostPassword>EBUPD</hostPassword>
+      
+      <!--  True will activate trace mode on the host.  -->
+      <hostTraceMode>true</hostTraceMode>
+      
+      <connectTimeout>10000</connectTimeout>
+      <receiveTimeout>300000</receiveTimeout>
+      
+     </hostEndPoint>
+  </hostEndPoints>
+</config>
+   

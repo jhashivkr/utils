@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:cache="http://www.springframework.org/schema/cache" xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:lang="http://www.springframework.org/schema/lang" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
+		http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd">
+
+	<context:property-placeholder location="classpath:variabledata.properties" />
+
+	<!--General -->
+	<bean id="oracleDataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close" p:driverClassName="${oracleDriver}" p:url="${oracleURL}"
+		p:username="${defaultID}" p:password="${defaultPassword}"></bean>
+
+	<context:annotation-config />
+	<context:component-scan base-package="ibg.cybersource.*" />
+	<context:component-scan base-package="ibg.cc.mq.writers.*" />
+
+	<!--Transaction Manager -->
+
+	<bean id="oracleTransactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="oracleDataSource"></property>
+		<qualifier value="oracleTx"></qualifier>
+	</bean>
+
+	<bean id="oracleTmplt" class="org.springframework.jdbc.core.JdbcTemplate"
+		scope="prototype">
+		<constructor-arg index="0" type="javax.sql.DataSource"
+			ref="oracleDataSource" />
+	</bean>
+	
+	<bean id="namedJdbcTmplt"
+		class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+		<constructor-arg index="0" type="javax.sql.DataSource"
+			ref="oracleDataSource" />
+	</bean>
+	
+	<!--Tuxedo  -->
+ 	<bean id="tuxedoDataSource"
+ 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+ 		<property name="driverClassName" value="${tuxedoDB2Driver}"/>
+ 		<property name="url" value="${tuxedoURL}"/>
+ 		<property name="username" value="${tuxedoUserID}"/>
+ 		<property name="password" value="${tuxedoPSWD}"/>
+ 	</bean>
+
+	<!-- Oracle DAO -->
+
+	<bean id="creditCardServiceLocator" class="ibg.cybersource.service.CreditCardServiceLocator" />
+
+
+	<bean id="searchMQResponseFailureDaoImpl"
+		class="ibg.cybersource.creditcard.search.dao.SearchMQResponseFailureDaoImpl"
+		scope="prototype">
+		<property name="dataSource" ref="oracleDataSource" />
+	</bean>
+
+	<bean id="searchCrCdTranHistoryDaoImpl"
+		class="ibg.cybersource.creditcard.search.dao.SearchCrCdTranHistoryDaoImpl"
+		scope="prototype">
+		<property name="dataSource" ref="oracleDataSource" />
+	</bean>
+
+	<bean id="searchCrCdDepoAcctDaoImpl"
+		class="ibg.cybersource.creditcard.maintenance.dao.SearchCrCdDepoAcctDaoImpl"
+		scope="prototype">
+		<property name="dataSource" ref="oracleDataSource" />
+	</bean>
+
+	<bean id="CrCdExpWarnDaoImpl"
+		class="ibg.cybersource.creditcard.reports.dao.CrCdExpWarnDaoImpl"
+		scope="prototype">
+		<property name="dataSource" ref="oracleDataSource" />
+	</bean>
+
+	<bean id="CrCdDelelteHistoryDaoImpl"
+		class="ibg.cybersource.creditcard.reports.dao.CrCdDelelteHistoryDaoImpl"
+		scope="prototype">
+		<property name="dataSource" ref="oracleDataSource" />
+	</bean>
+
+	<bean id="creditCardCustomerProfileDaoImpl"
+		class="ibg.cybersource.creditcard.customer.dao.CreditCardCustomerProfileDaoImpl"
+		scope="prototype">
+		<property name="dataSource" ref="oracleDataSource" />
+	</bean>
+
+	<bean id="searchCreditCardBillAcctDao"
+		class="ibg.cybersource.creditcard.maintenance.dao.SearchCreditCardBillAcctDaoImpl"
+		scope="prototype">
+		<property name="dataSource" ref="oracleDataSource" />
+	</bean>
+	
+	<bean id="mqTransactionHistoryDao"
+		class="ibg.cybersource.creditcard.maintenance.dao.MQTransactionHistoryDaoImpl"
+		scope="prototype">
+	</bean>
+	
+	<bean id="mqListenerMgmtDao"
+		class="ibg.cybersource.creditcard.maintenance.dao.MQListenerMgmtDao"
+		scope="prototype">
+	</bean>
+
+	<!-- MQ definitions -->
+	<!-- JMS Read Destination Resolver -->
+	<bean id="mqReadDestinationResolver" class="com.ibm.mq.jms.MQQueue">
+		<constructor-arg value="${jms.queue.get.name}" />
+	</bean>
+	
+	<bean id="messageMq" class="com.ibm.mq.MQMessage" scope="prototype"/>
+
+	<bean id="preAuthDestinationResolver" class="com.ibm.mq.jms.MQQueue">
+		<constructor-arg value="${jms.queue.preauth}" />
+		<property name="targetClient" value="1" />
+	</bean>
+
+	<bean id="settlementDestinationResolver" class="com.ibm.mq.jms.MQQueue">
+		<constructor-arg value="${jms.queue.settlement}" />
+		<property name="targetClient" value="1" />
+	</bean>
+
+
+	<!-- MQ 1 details starts -->
+	<bean id="connectionFactory1" class="com.ibm.mq.jms.MQQueueConnectionFactory">
+		<property name="hostName" value="${jms.queue.host.1}" />
+		<property name="port" value="${jms.queue.port}" />
+		<property name="queueManager" value="${jms.queue.manager.1}" />
+		<property name="transportType" value="${jms.queue.transportType}" />
+	</bean>
+
+	<bean id="mqConnectionFactory1"
+		class="org.springframework.jms.connection.UserCredentialsConnectionFactoryAdapter">
+		<property name="targetConnectionFactory" ref="connectionFactory1" />
+		<property name="username" value="${jms.queue.username}" />
+		<property name="password" value="${jms.queue.password}" />
+	</bean>
+
+	<!-- JMS Queue Template -->
+	<bean id="mqReadTemplate1" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory">
+			<ref bean="mqConnectionFactory1" />
+		</property>
+		<property name="defaultDestination">
+			<ref bean="mqReadDestinationResolver" />
+		</property>
+		<!-- <property name="sessionTransacted" value="true"/> -->
+	</bean>
+
+	<bean id="mqBrowser1" class="ibg.cc.mq.readers.MessageBrowser">
+		<property name="jmsTemplate">
+			<ref bean="mqReadTemplate1" />
+		</property>
+	</bean>
+
+	<bean id="preAuthWriteJmsTemplate1" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory">
+			<ref bean="mqConnectionFactory1" />
+		</property>
+		<property name="defaultDestination">
+			<ref bean="preAuthDestinationResolver" />
+		</property>
+		<property name="sessionTransacted" value="true" />
+		<aop:scoped-proxy />
+	</bean>
+
+	<bean id="settlementWriteJmsTemplate1" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory">
+			<ref bean="mqConnectionFactory1" />
+		</property>
+		<property name="defaultDestination">
+			<ref bean="settlementDestinationResolver" />
+		</property>
+		<property name="sessionTransacted" value="true" />
+		<aop:scoped-proxy />
+	</bean>
+
+	<!-- Message Receiver Definition -->
+
+	<!-- MQ 1 details ends -->
+
+	<!-- MQ 2 details starts -->
+	<bean id="connectionFactory2" class="com.ibm.mq.jms.MQQueueConnectionFactory">
+		<property name="hostName" value="${jms.queue.host.2}" />
+		<property name="port" value="${jms.queue.port}" />
+		<property name="queueManager" value="${jms.queue.manager.2}" />
+		<property name="transportType" value="${jms.queue.transportType}" />
+	</bean>
+	<bean id="mqConnectionFactory2"
+		class="org.springframework.jms.connection.UserCredentialsConnectionFactoryAdapter">
+		<property name="targetConnectionFactory" ref="connectionFactory2" />
+		<property name="username" value="${jms.queue.username}" />
+		<property name="password" value="${jms.queue.password}" />
+	</bean>
+
+	<!-- JMS Queue Template -->
+	<bean id="mqReadTemplate2" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory">
+			<ref bean="mqConnectionFactory2" />
+		</property>
+		<property name="defaultDestination">
+			<ref bean="mqReadDestinationResolver" />
+		</property>
+		<property name="sessionTransacted" value="true" />
+	</bean>
+
+	<bean id="mqBrowser2" class="ibg.cc.mq.readers.MessageBrowser">
+		<property name="jmsTemplate">
+			<ref bean="mqReadTemplate2" />
+		</property>
+	</bean>
+
+	<bean id="preAuthWriteJmsTemplate2" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory">
+			<ref bean="mqConnectionFactory2" />
+		</property>
+		<property name="defaultDestination">
+			<ref bean="preAuthDestinationResolver" />
+		</property>
+		<property name="sessionTransacted" value="true" />
+		<aop:scoped-proxy />
+	</bean>
+
+	<bean id="settlementWriteJmsTemplate2" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory">
+			<ref bean="mqConnectionFactory2" />
+		</property>
+		<property name="defaultDestination">
+			<ref bean="settlementDestinationResolver" />
+		</property>
+		<property name="sessionTransacted" value="true" />
+		<aop:scoped-proxy />
+	</bean>
+
+	<bean id="preAuthMessageSender" class="ibg.cc.mq.writers.PreAuthMessageSender" >
+		<property name="writers">
+     		<list>
+      			<ref bean="preAuthWriteJmsTemplate1" />
+      			<ref bean="preAuthWriteJmsTemplate2" />
+     		</list>
+   		</property>	
+	</bean>
+	<bean id="settlementMessageSender" class="ibg.cc.mq.writers.SettlementMessageSender">
+		<property name="writers">
+     		<list>
+      			<ref bean="settlementWriteJmsTemplate1" />
+      			<ref bean="settlementWriteJmsTemplate2" />
+     		</list>
+   		</property>	
+	</bean>
+	
+	<bean id="messageWriter" class="ibg.cc.mq.writers.MessageWriter" />
+
+
+	<!-- Message Receiver Definition -->
+	
+	<bean id="mqThrdExectr" class="com.spring.jms.MQThreadExecutor"
+		scope="singleton">
+		<constructor-arg index="0" type="int" value="10" />
+		<constructor-arg index="1" type="int" value="500" />
+		<constructor-arg index="2" type="int" value="10000" />
+	</bean>
+	
+	<bean id="logThrdExectr" class="com.cc.log.analyze.LogThreadExecutor"
+		scope="singleton">
+		<constructor-arg index="0" type="int" value="10" />
+		<constructor-arg index="1" type="int" value="500" />
+		<constructor-arg index="2" type="int" value="10000" />
+	</bean>
+
+
+	<!-- MQ 2 details ends -->
+
+	<!-- not to be committed in any env - just for testing -->
+
+	<bean id="mqReader1" class="com.spring.jms.MessageReader">
+		<property name="jmsTemplate">
+			<ref bean="mqReadTemplate1" />
+		</property>
+	</bean>
+
+	<bean id="mqReader2" class="com.spring.jms.MessageReader">
+		<property name="jmsTemplate">
+			<ref bean="mqReadTemplate2" />
+		</property>
+	</bean>
+	
+	<!-- TEST JMS Queue Template -->
+	<bean id="mqTestMsgWriteTemplate" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory">
+			<ref bean="mqConnectionFactory1" />
+		</property>
+		<property name="defaultDestination">
+			<ref bean="mqReadDestinationResolver" />
+		</property>
+	</bean>
+	
+	<bean id="testMessageWriter" class="ibg.cc.mq.writers.RequestQMessageWriter" scope="singleton" />
+
+</beans>

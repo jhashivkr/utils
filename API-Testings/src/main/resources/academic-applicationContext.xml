@@ -1,0 +1,420 @@
+<?xml  version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:cache="http://www.springframework.org/schema/cache" xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:lang="http://www.springframework.org/schema/lang" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
+		http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd">
+
+
+
+	<!-- property configure -->
+	<context:property-placeholder location="classpath:variabledata.properties" />
+
+	<context:annotation-config />
+
+	
+	
+	
+	<!-- Data source configuration -->
+	<!-- jee:jndi-lookup id="dataSource" jndi-name="${oracleDataSourceName}" 
+		/ -->
+
+	<!--General  -->
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close" p:driverClassName="${oracleDriver}" p:url="${oracleURL}"
+		p:username="${defaultID}" p:password="${defaultPassword}"></bean>
+	
+	<!-- DB2 -->	
+	<bean id="nonAcdmDataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close" p:driverClassName="${mainframeDB2Driver}" p:url="${mainframeURL}"
+		p:username="${mainframeUserID}" p:password="${mainframePSWD}"></bean>
+	
+	<!--Tuxedo  -->	
+	<!-- 
+	<bean id="nonAcdmDataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close" p:driverClassName="${tuxedoDB2Driver}" p:url="${tuxedoURL}"
+		p:username="${tuxedoUserID}" p:password="${tuxedoPSWD}"></bean>
+	 -->
+	<!--  mainframe migration config starts -->
+	
+	<context:annotation-config />
+	<context:component-scan base-package="ibg.publisher.*" />
+	<context:component-scan base-package="ibg.accountprofile.*" />
+	
+	<!-- TODO  (Need to configure Data source using JNDI -->
+	
+	<bean id="nonAcademiServiceLocator" class="ibg.nonacademics.service.NonAcademicServiceLocator" />
+	
+	<bean id="companyInformationDao" class="ibg.publisher.companyinformation.dao.CompanyInformationDaoImpl">
+	<property name="dataSource" ref="nonAcdmDataSource" />
+	</bean>
+	
+	<bean id="accountProfileInfoDao" class="ibg.accountprofile.dao.AccountProfileInfoDaoImpl">
+		<property name="dataSource" ref="nonAcdmDataSource" />
+	</bean>
+	
+	
+	<!--SQL Property Reader -->
+	
+	<bean id="sqlPropertyReader" class="ibg.common.util.SqlPropertyReader"
+		lazy-init="true" />
+
+	<bean id="sqlProps" class="ibg.lib.activity.SqlPropertyReader" />
+	
+	
+	<!--  mainframe migration config ends -->
+
+<!-- Scan class path for annotations (eg: @Service, @Repository etc) -->
+	<context:component-scan base-package="ibg.browserow.*" />
+	<context:component-scan base-package="ibg.academics.*" />
+	<context:component-scan base-package="ibg.nacdm.*" />
+	<context:component-scan base-package="ibg.common.util.*" />
+	<context:component-scan base-package="ibg.alibris.*" />
+	<context:component-scan base-package="ibg.administration.*" />
+	
+	<!-- Data source configuration -->
+	<!-- An AnnotationSessionFactoryBean for loading Hibernate mappings from 
+		annotated domain classes -->
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="annotatedClasses">
+			<list>
+				<value>ibg.academics.dto.AcademicMarkAll</value>
+				<value>ibg.academics.dto.AcademicListItem</value>
+				<value>ibg.academics.dto.AcademicList</value>
+				<value>ibg.academics.dto.AcademicUser</value>
+				<value>ibg.academics.dto.AcademicListDetails</value>
+				<value>ibg.academics.dto.AcademicOrderInfo</value>
+				<value>ibg.academics.dto.AcademicExternalUser</value>
+				<value>ibg.academics.dto.AcademicOrderInfoTemplate</value>
+				<value>ibg.academics.dto.AcademicOrderInfoTemplateData</value>
+				<value>ibg.academics.dto.AcademicItemHistory</value>
+				<value>ibg.academics.dto.MasterPreference</value>
+				<value>ibg.academics.dto.UserPreference</value>
+				<value>ibg.academics.dto.AcademicAlibrisItem</value>
+				<value>ibg.academics.administration.dto.UserConfigField</value>
+				<value>ibg.academics.administration.dto.UserConfigOption</value>
+				<value>ibg.academics.administration.dto.AcademicUserPref</value>
+				<value>ibg.academics.administration.dto.AcdmUserPref</value>
+				<value>ibg.academics.administration.dto.AcdmUserPrefId</value>
+				<value>ibg.academics.dto.AcademicCommunityGroups</value>
+				<value>ibg.academics.dto.AcademicExternalTitleForwardDetails</value>
+				<value>ibg.academics.administration.dto.CisCustomer</value>
+				<value>ibg.academics.administration.dto.CisUser</value>
+				<value>ibg.academics.administration.dto.UserProfileInfo</value>
+				<value>ibg.academics.administration.dto.AplcUserRole</value>
+				<value>ibg.academics.administration.dto.AcademicUserContact</value>
+
+				<value>ibg.academics.cis.h.pojos.AcdmListItem</value>
+				<value>ibg.academics.cis.h.pojos.AcdmListOrderInfo</value>
+				<value>ibg.academics.cis.h.pojos.AcdmListOrderInfoId</value>
+				<value>ibg.academics.cis.h.pojos.CISCustomer</value>
+				<value>ibg.academics.cis.h.pojos.CisCustGroup</value>
+				<value>ibg.academics.cis.h.pojos.CISUser</value>
+				<value>ibg.academics.cis.h.pojos.AplcUser</value>
+				<value>ibg.academics.cis.h.pojos.AcdmItemHistory</value>
+				
+				<!-- selection list -->				
+				<value>ibg.selectionlist.pojos.SelList</value>				
+				<value>ibg.selectionlist.pojos.SelListItemId</value>
+    			<value>ibg.selectionlist.pojos.SelListItem</value>
+    			<value>ibg.selectionlist.pojos.SelList</value>
+    			<value>ibg.selectionlist.pojos.PubSrc</value>
+    			<value>ibg.selectionlist.pojos.SelListTp</value>
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">${oracleDialect}</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.validator.apply_to_ddl">false</prop>
+				<prop key="hibernate.validator.autoregister_listeners">false</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- Hibernate Transaction Manager -->
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<!-- Activates annotation based transaction management -->
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	<!-- Bean defination for Jdbc implementation -->
+	<bean id="academicLegacyJdbcDao" class="ibg.academics.dao.AcademicLegacyJdbcDaoImpl">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<bean id="academicOriginalOrderInfoDao"
+		class="ibg.academics.dao.legacy.AcademicOriginalOrderInfoDaoImpl">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<bean id="academicDownloadJdbcDao" class="ibg.academics.dao.AcademicDownloadJdbcDaoImpl">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<bean id="academiServiceLocator" class="ibg.academics.service.AcademicServiceLocator" />
+
+
+
+	<!-- json parser config starts -->
+
+	<bean id="facetsJson" class="java.io.File" scope="singleton"
+		lazy-init="true">
+		<constructor-arg value="classpath:facets.json" />
+	</bean>
+	<bean id="rangeJson" class="java.io.File" scope="singleton"
+		lazy-init="true">
+		<constructor-arg value="classpath:range.json" />
+	</bean>
+
+	<bean id="multidimJson" class="java.io.File" scope="singleton"
+		lazy-init="true">
+		<constructor-arg value="classpath:multidims.json" />
+	</bean>
+
+	<bean id="jsonFactory" class="com.fasterxml.jackson.core.JsonFactory"
+		scope="singleton" lazy-init="true" />
+
+	<bean id="jsonWriter" class="java.io.StringWriter" scope="prototype"
+		lazy-init="true" />
+
+	<bean id="jsonMapper"
+		class="ibg.lib.activity.browserowp.db.response.ObjectMapperWraper"
+		scope="prototype" lazy-init="true" />
+
+	<bean id="jsonObjMapper" class="com.fasterxml.jackson.databind.ObjectMapper"
+		scope="prototype" lazy-init="true" />
+
+	<!-- json parser config ends -->
+
+	<bean id="ganimedeThrdExectr" class="ibg.lib.activity.GanimedeThreadExecutor"
+		scope="singleton">
+		<constructor-arg index="0" type="int" value="10" />
+		<constructor-arg index="1" type="int" value="500" />
+		<constructor-arg index="2" type="int" value="10000" />
+	</bean>
+
+	<bean id="qMessageProcessors" class="ibg.academics.cis.queue.reader.QueueReaders"
+		scope="singleton" />
+
+	<bean id="eanChkStatService" class="ibg.lib.activity.EanCheckStatusGnmdService"
+		scope="session" />
+
+
+
+	<bean id="populateUserRoleActions" class="ibg.lib.activity.auth.PopulateUserRoleActions"
+		scope="singleton">
+		<constructor-arg index="0"
+			type="org.springframework.core.io.ClassPathResource" value="/roleBasedActions.xml" />
+	</bean>
+	<bean id="populateOrderInfoConfig" class="ibg.lib.activity.auth.PopulateOrderInfoConfig"
+		scope="singleton">
+		<constructor-arg index="0"
+			type="org.springframework.core.io.ClassPathResource" value="/orderInfoConfig.xml" />
+	</bean>
+	<!-- solr api conf starts -->
+	<bean id="solrServerFactory" class="solr.api.acdm.SolrJServerFactory"
+		scope="prototype">
+		<constructor-arg index="0" type="String" value="${SOLR_CORE_IPAGE}" />
+		<constructor-arg index="1" type="String"
+			value="${SEARCH_ENGINE_HOST}" />
+		<constructor-arg index="2" type="int"
+			value="${SEARCH_ENGINE_PORT}" />
+		<constructor-arg index="3" type="int" value="${SOLR_QUERY_MAX_MS}" />
+	</bean>
+
+	<bean id="solrQry" class="ibg.product.search.acdm.SolrQueryAcdm" scope="prototype">
+		<property name="params">
+			<map>
+				<entry key="facet" value="${facet}" />
+				<entry key="facet.missing" value="${facet.missing}" />
+				<entry key="facet.mincount" value="${facet.mincount}" />
+				<entry key="facet.sort" value="${facet.sort}" />
+				<entry key="fq" value="${fq}" />
+				<entry key="facet.field" value="${facet.field}" />
+				<entry key="fl" value="${fl}" />
+			</map>
+		</property>
+	</bean>
+	<bean id="solrSortHelper" class="ibg.product.search.ListSortFilterHelper" scope="prototype" lazy-init="true"/>
+	<!-- solr api conf ends -->
+
+
+	<!-- generic cache manager starts -->
+	<bean id="gCacheManager" class="org.springframework.cache.support.SimpleCacheManager">
+		<property name="caches">
+			<set>
+				<bean
+					class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean"
+					p:name="sortLibraryActivity" />
+			</set>
+		</property>
+	</bean>
+
+
+
+	<bean id="searchFiltersList" class="ibg.product.search.acdm.SearchParams"
+		scope="prototype" lazy-init="true">
+		<property name="params">
+			<list value-type="com.endeca.navigation.SolrDimVal" />
+		</property>
+	</bean>
+	<bean id="exposedRefinementsList" class="ibg.product.search.acdm.SearchParams"
+		scope="prototype" lazy-init="true">
+		<property name="params">
+			<list value-type="com.endeca.navigation.SolrDimVal" />
+		</property>
+	</bean>
+	<bean id="rangeFiltersList" class="ibg.product.search.acdm.SearchParams"
+		scope="prototype" lazy-init="true">
+		<property name="params">
+			<list value-type="java.lang.String" />
+		</property>
+	</bean>
+	<bean id="recordFiltersList" class="ibg.product.search.acdm.SearchParams"
+		scope="prototype" lazy-init="true">
+		<property name="params">
+			<list value-type="java.lang.String" />
+		</property>
+	</bean>
+	<bean id="searchTermList" class="ibg.product.search.acdm.SearchParams"
+		scope="prototype" lazy-init="true">
+		<property name="params">
+			<list value-type="java.lang.String" />
+		</property>
+	</bean>
+
+	<bean id="searchInfoObj" class="ibg.product.search.acdm.SearchInfoObject"
+		scope="prototype" lazy-init="true">
+		<property name="rangeFilters" ref="rangeFiltersList" />
+		<property name="recordFilters" ref="recordFiltersList" />
+		<property name="searchTerm" ref="searchTermList" />
+	</bean>
+
+	<bean id="gnmdeObj" class="ibg.product.search.acdm.GnmdSearchDataObject"
+		scope="prototype" lazy-init="true" />
+
+	<cache:annotation-driven />
+	<bean id="ehcache"
+		class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"
+		p:configLocation="classpath:ehcache.xml" p:shared="true" />
+
+	<bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager"
+		p:cacheManager-ref="ehcache" />
+
+	<bean id="selectionListCacheInterface" class="ibg.product.search.SelectionListCacheInterface"
+		scope="singleton">
+		<property name="ehCacheManager" ref="cacheManager" />
+	</bean>
+
+	<bean id="gnmdDataObjectsCacheInterface" class="ibg.product.search.GnmdDataObjectsCacheInterface"
+		scope="singleton">
+		<property name="ehCacheManager" ref="cacheManager" />
+	</bean>
+	
+	<!-- checksStatusObjects -->
+	<bean id="checksStatusObjectsCacheInterface" class="ibg.product.search.GnmdDataObjectsCacheInterface"
+		scope="singleton">
+		<property name="ehCacheManager" ref="cacheManager" />
+	</bean>
+	
+	
+
+	<!-- checksStatusObjects -->
+	<bean id="browseRowPCacheInterface" class="ibg.product.search.BrowseRowPCacheInterface"
+		scope="singleton">
+		<property name="ehCacheManager" ref="cacheManager" />
+	</bean>
+
+	<!-- bean id="selectionListCacheService" class="ibg.product.search.SelectionListCacheService" 
+		scope="singleton" lazy-init="true"> <property name="cacheInterface" ref="selectionListCacheInterface" 
+		/> </bean -->
+
+	<!-- bean id="selectionListCacheManager" class="ibg.product.search.SelectionListCacheManager" 
+		scope="singleton" lazy-init="true"> <property name="cache" ref="selectionListCacheService" 
+		/> </bean -->
+
+	<bean id="sessionUserDataImpl" class="ibg.product.search.acdm.SessionUserDataImpl"
+		scope="session" lazy-init="true">
+		<aop:scoped-proxy />
+	</bean>
+
+	<bean id="gnmdSearchDataImpl" class="ibg.product.search.acdm.GnmdSearchDataImpl"
+		scope="session" lazy-init="true">
+		<aop:scoped-proxy />
+	</bean>
+
+	<bean id="acdmFilterHelper" class="ibg.product.search.AcdmFilterHelper"
+		scope="prototype" lazy-init="true" >
+		<property name="params">
+			<map>
+				<entry key="Fund" value="budget" />
+				<entry key="Loan Type" value="loantype" />
+				<entry key="Quantity" value="ooqty" />
+				<entry key="Initial Selector" value="ooselector" />
+				<entry key="Profile" value="profile" />
+				<entry key="Location" value="site" />
+			</map>
+		</property>
+	</bean>
+
+	<!-- session user bean ends -->
+
+
+	<!-- generic cache manager ends -->
+
+	<bean id="propertyReader" class="ibg.common.util.PropertyReader"
+		lazy-init="true" />
+
+	<bean id="gnmdProps" class="ibg.lib.activity.PropertyReader" />
+
+	<bean id="velocityEngine"
+		class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
+		<property name="velocityProperties">
+			<value>
+				resource.loader=class
+				class.resource.loader.class=org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
+			</value>
+		</property>
+	</bean>
+	<bean id="velocityConfig"
+		class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
+		<property name="resourceLoaderPath" value="WEB-INF/" />
+	</bean>
+	<bean id="titleEmailService" class="ibg.common.email.TitleEmailServiceImpl"
+		scope="singleton">
+		<constructor-arg ref="velocityConfig" />
+	</bean>
+	
+	<!-- consumer queues -->
+
+	<bean id="qConsumer" class="ibg.common.tibco.TibcoConnectionBuilder" scope="prototype">
+		<property name="serverUrl" value="${tibco.server.url}" />
+		<property name="username" value="${quserName}" />
+		<property name="password" value="${qpassword}" />
+		<property name="acknowledgeMessages" value="${acknowledgeMessages}" />
+	</bean>
+	
+	<bean id="qReader" class="ibg.common.tibco.TibcoMessageReader"
+		scope="prototype" />
+
+	<bean id="solrQryResult" class="ibg.product.search.acdm.SearchQueryResult"
+		scope="prototype" />
+	
+	<bean id="userQDataWriter" class="ibg.academics.cis.queue.writer.UserQDataWriter"
+		scope="prototype" />
+		
+	<bean id="acdmListCreator" class="ibg.academics.cis.queue.writer.AcdmListCreator"
+		scope="prototype" />
+</beans>

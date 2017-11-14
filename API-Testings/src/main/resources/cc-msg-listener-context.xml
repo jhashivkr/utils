@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:cache="http://www.springframework.org/schema/cache" xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:lang="http://www.springframework.org/schema/lang" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
+		http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd">
+
+
+	<!-- MQ definitions -->
+	<!-- JMS Read Destination Resolver -->
+	<bean id="mqReadDestinationResolver" class="com.ibm.mq.jms.MQQueue">
+		<constructor-arg value="${jms.queue.get.name}" />
+	</bean>
+
+	<bean id="messageMq" class="com.ibm.mq.MQMessage" scope="prototype" />
+
+	<bean id="preAuthDestinationResolver" class="com.ibm.mq.jms.MQQueue">
+		<constructor-arg value="${jms.queue.preauth}" />
+		<property name="targetClient" value="1" />
+	</bean>
+
+	<bean id="settlementDestinationResolver" class="com.ibm.mq.jms.MQQueue">
+		<constructor-arg value="${jms.queue.settlement}" />
+		<property name="targetClient" value="1" />
+	</bean>
+
+	<!-- MQ 1 details starts -->
+	<bean id="connectionFactory1" class="com.ibm.mq.jms.MQQueueConnectionFactory">
+		<property name="hostName" value="${jms.queue.host.1}" />
+		<property name="port" value="${jms.queue.port}" />
+		<property name="queueManager" value="${jms.queue.manager.1}" />
+		<property name="transportType" value="${jms.queue.transportType}" />
+	</bean>
+
+	<bean id="mqConnectionFactory1"
+		class="org.springframework.jms.connection.UserCredentialsConnectionFactoryAdapter">
+		<property name="targetConnectionFactory" ref="connectionFactory1" />
+		<property name="username" value="${jms.queue.username}" />
+		<property name="password" value="${jms.queue.password}" />
+	</bean>
+
+	<bean id="cachingJMSWriterFactory1"
+	    class="org.springframework.jms.connection.CachingConnectionFactory">
+	    <property name="targetConnectionFactory" ref="mqConnectionFactory1" />
+	    <property name="sessionCacheSize" value="10" />
+	</bean>
+	
+	<bean id="preAuthWriteJmsTemplate1" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory">
+			<!-- <ref bean="mqConnectionFactory1" />  -->
+			<ref bean="cachingJMSWriterFactory1" />
+		</property>
+		<property name="defaultDestination">
+			<ref bean="preAuthDestinationResolver" />
+		</property>
+		<property name="sessionTransacted" value="true" />
+		<aop:scoped-proxy />
+	</bean>
+
+	<bean id="settlementWriteJmsTemplate1" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory">
+			<!-- <ref bean="mqConnectionFactory1" />  -->
+			<ref bean="cachingJMSWriterFactory1" />
+		</property>
+		<property name="defaultDestination">
+			<ref bean="settlementDestinationResolver" />
+		</property>
+		<property name="sessionTransacted" value="true" />
+		<aop:scoped-proxy />
+	</bean>
+
+	<!-- Message Receiver Definition -->
+
+	<!-- MQ 1 details ends -->
+
+	<!-- MQ 2 details starts -->
+	<bean id="connectionFactory2" class="com.ibm.mq.jms.MQQueueConnectionFactory">
+		<property name="hostName" value="${jms.queue.host.2}" />
+		<property name="port" value="${jms.queue.port}" />
+		<property name="queueManager" value="${jms.queue.manager.2}" />
+		<property name="transportType" value="${jms.queue.transportType}" />
+	</bean>
+	<bean id="mqConnectionFactory2"
+		class="org.springframework.jms.connection.UserCredentialsConnectionFactoryAdapter">
+		<property name="targetConnectionFactory" ref="connectionFactory2" />
+		<property name="username" value="${jms.queue.username}" />
+		<property name="password" value="${jms.queue.password}" />
+	</bean>
+
+	<bean id="cachingJMSWriterFactory2"
+	    class="org.springframework.jms.connection.CachingConnectionFactory">
+	    <property name="targetConnectionFactory" ref="mqConnectionFactory2" />
+	    <property name="sessionCacheSize" value="10" />
+	</bean>
+	
+	<bean id="preAuthWriteJmsTemplate2" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory">
+			<!-- <ref bean="mqConnectionFactory2" />  -->
+			<ref bean="cachingJMSWriterFactory2" />
+		</property>
+		<property name="defaultDestination">
+			<ref bean="preAuthDestinationResolver" />
+		</property>
+		<property name="sessionTransacted" value="true" />
+		<aop:scoped-proxy />
+	</bean>
+
+	<bean id="settlementWriteJmsTemplate2" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory">
+			<!-- <ref bean="mqConnectionFactory2" />  -->
+			<ref bean="cachingJMSWriterFactory2" />
+		</property>
+		<property name="defaultDestination">
+			<ref bean="settlementDestinationResolver" />
+		</property>
+		<property name="sessionTransacted" value="true" />
+		<aop:scoped-proxy />
+	</bean>
+
+	<bean id="preAuthMessageSender" class="ibg.cc.mq.writers.PreAuthMessageSender" scope="prototype">
+		<property name="writers">
+			<list>
+				<ref bean="preAuthWriteJmsTemplate1" />
+				<ref bean="preAuthWriteJmsTemplate2" />
+			</list>
+		</property>
+	</bean>
+	<bean id="settlementMessageSender" class="ibg.cc.mq.writers.SettlementMessageSender" scope="prototype">
+		<property name="writers">
+			<list>
+				<ref bean="settlementWriteJmsTemplate1" />
+				<ref bean="settlementWriteJmsTemplate2" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="messageWriter" class="ibg.cc.mq.writers.MessageWriter" scope="prototype"/>
+
+
+	<!-- Message Receiver Definition -->
+
+	<bean id="mqThrdExectr" class="ibg.cc.mq.listener.MQThreadExecutor"
+		scope="singleton">
+		<constructor-arg index="0" type="int" value="100" />
+		<constructor-arg index="1" type="int" value="1000" />
+		<constructor-arg index="2" type="int" value="1000" />
+	</bean>
+
+
+	<!-- TEST JMS Queue Template -->
+	<bean id="mqTestMsgWriteTemplate" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory">
+			<ref bean="mqConnectionFactory1" />
+		</property>
+		<property name="defaultDestination">
+			<ref bean="mqReadDestinationResolver" />
+		</property>
+	</bean>
+	
+	<bean id="testMessageWriter" class="ibg.cc.mq.writers.RequestQMessageWriter"
+		scope="singleton" />
+	<!-- MQ definitions -->
+	
+
+	<!-- Message Listener Definition -->
+	
+
+	<!-- Message Receiver Definition -->
+
+	<bean id="messageListener1" class="ibg.cc.mq.listener.MessageListener" />
+	<bean id="messageListener2" class="ibg.cc.mq.listener.MessageListener" />
+
+	<bean id="listenerContainer1"
+		class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+		<property name="connectionFactory" ref="mqConnectionFactory1" />
+		<property name="destinationName" value="${jms.queue.get.name}" />
+		<property name="concurrentConsumers" value="1" />
+		<property name="sessionTransacted" value="true" />
+		<property name="autoStartup" value="false" />
+	</bean>
+
+	<bean id="listenerContainer2"
+		class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+		<property name="connectionFactory" ref="mqConnectionFactory2" />
+		<property name="destinationName" value="${jms.queue.get.name}" />
+		<property name="concurrentConsumers" value="1" />
+		<property name="sessionTransacted" value="true" />
+		<property name="autoStartup" value="false" />
+	</bean>
+
+	<!-- 
+	<bean id="mqControllers" class="ibg.cc.mq.listener.MQListenerControllers" scope="singleton" />
+	 -->
+	
+	<bean id="mqStatController" class="ibg.cc.mq.listener.MQListenerStatController"  scope="singleton" />
+	
+	
+</beans>

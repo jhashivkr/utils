@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:tns="https://ics2wstest.ic3.com/commerce/1.x/transactionProcessor"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	name="CyberSourceTransactionWS" targetNamespace="https://ics2wstest.ic3.com/commerce/1.x/transactionProcessor">
+	<wsdl:types>
+		<xsd:schema
+			targetNamespace="https://ics2wstest.ic3.com/commerce/1.x/transactionProcessor">
+			<xsd:element name="NewOperation">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="in" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="NewOperationResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="out" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:schema>
+	</wsdl:types>
+	<wsdl:message name="NewOperationRequest">
+		<wsdl:part element="tns:NewOperation" name="parameters" />
+	</wsdl:message>
+	<wsdl:message name="NewOperationResponse">
+		<wsdl:part element="tns:NewOperationResponse" name="parameters" />
+	</wsdl:message>
+	<wsdl:portType name="CyberSourceTransaction_1.118">
+		<wsdl:operation name="NewOperation">
+			<wsdl:input message="tns:NewOperationRequest" />
+			<wsdl:output message="tns:NewOperationResponse" />
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="CyberSourceTransaction_1.118SOAP"
+		type="tns:CyberSourceTransaction_1.118">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="NewOperation">
+			<soap:operation
+				soapAction="https://ics2wstest.ic3.com/commerce/1.x/transactionProcessor/NewOperation" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="CyberSourceTransaction_1.118">
+		<wsdl:port binding="tns:CyberSourceTransaction_1.118SOAP"
+			name="CyberSourceTransaction_1.118SOAP">
+			<soap:address location="http://www.example.org/" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

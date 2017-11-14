@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<webappbnd:WebAppBinding xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:webappbnd="webappbnd.xmi" xmi:id="WebAppBinding_1208528960754">
+  <webapp href="WEB-INF/web.xml#WebApp_ID"/>
+  <resRefBindings xmi:id="ResourceRefBinding_1208528994032" jndiName="jdbc/eboracle">
+    <bindingResourceRef href="WEB-INF/web.xml#ResourceRef_1208528994032"/>
+  </resRefBindings>
+  <resRefBindings xmi:id="ResourceRefBinding_1208529525164" jndiName="eis/ctg">
+    <bindingResourceRef href="WEB-INF/web.xml#ResourceRef_1208529525164"/>
+  </resRefBindings>
+  <resRefBindings xmi:id="ResourceRefBinding_1242395393626" jndiName="jdbc/kiosk">
+    <bindingResourceRef href="WEB-INF/web.xml#ResourceRef_1242395393626"/>
+  </resRefBindings>
+  <resRefBindings xmi:id="ResourceRefBinding_1243348113498" jndiName="jdbc/TIMS_DB2">
+    <bindingResourceRef href="WEB-INF/web.xml#ResourceRef_1243348113498"/>
+  </resRefBindings>
+</webappbnd:WebAppBinding>

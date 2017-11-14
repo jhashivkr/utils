@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:cache="http://www.springframework.org/schema/cache" xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:lang="http://www.springframework.org/schema/lang" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
+		http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd">
+
+<!-- property configure -->
+	<context:property-placeholder location="classpath:variabledata.properties" />
+	
+	<context:annotation-config />
+	
+	<context:component-scan base-package="ibg.accountprofile.*" />
+	<context:component-scan base-package="ibg.publisher.publisherinformation.services" />
+	<context:component-scan base-package="ibg.publisher.summary.*" />
+	<context:component-scan base-package="ibg.publisher.po.order.header.*" />
+	<context:component-scan base-package="ibg.publisher.companyinformation.*" />	
+	<context:component-scan base-package="ibg.publisher.*"/>
+	<context:component-scan base-package="ibg.customer.electronicpayment.*" />
+	
+	
+	<!--
+	<context:component-scan base-package="ibg.publisher.po.order.header.service" /> 
+	<context:component-scan base-package="ibg.accountprofile.*" />
+	<context:component-scan base-package="ibg.publisher.*" />	
+	<context:component-scan base-package="ibg.customer.*" />
+	<context:component-scan base-package="ibg.administration.*" />
+	<context:component-scan base-package="ibg.product.*"/>
+	 -->
+	 
+	<!-- TODO  (Need to configure Data source using JNDI -->
+		
+	<!-- DB2 -->
+	<bean id="db2DataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${mainframeDB2Driver}" />
+		<property name="url" value="${mainframeURL}" />
+		<property name="username" value="${mainframeUserID}" />
+		<property name="password" value="${mainframePSWD}" />
+	</bean>
+
+	<!--Tuxedo  -->
+ 	<bean id="nonAcdmTuxedoDataSource" 
+ 		class="org.springframework.jdbc.datasource.DriverManagerDataSource"> 
+ 		<property name="driverClassName" value="${tuxedoDB2Driver}"/> 
+ 		<property name="url" value="${tuxedoURL}"/> 
+ 		<property name="username" value="${tuxedoUserID}"/> 
+ 		<property name="password" value="${tuxedoPSWD}"/> 
+ 	</bean> 
+	
+	<!--Tuxedo  -->
+ 	<bean id="tuxedoDataSource"
+ 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+ 		<property name="driverClassName" value="${tuxedoDB2Driver}"/>
+ 		<property name="url" value="${tuxedoURL}"/>
+ 		<property name="username" value="${tuxedoUserID}"/>
+ 		<property name="password" value="${tuxedoPSWD}"/>
+ 	</bean>
+ 	
+ 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close" p:driverClassName="${oracleDriver}" p:url="${oracleURL}"
+		p:username="${defaultID}" p:password="${defaultPassword}"></bean>
+		
+	<bean id="nonAcdmTmplt"
+		class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+		<constructor-arg index="0" type="javax.sql.DataSource"
+			ref="db2DataSource" />
+	</bean>
+
+	<bean id="tuxedoTmplt" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate" scope="prototype">
+		<constructor-arg index="0" type="javax.sql.DataSource"	ref="tuxedoDataSource" />
+	</bean>
+	
+	<bean id="db2NamedTmplt" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate" scope="prototype">
+		<constructor-arg index="0" type="javax.sql.DataSource"	ref="db2DataSource" />
+	</bean>
+	
+	<bean id="db2Tmplt" class="org.springframework.jdbc.core.JdbcTemplate" scope="prototype">
+		<constructor-arg index="0" type="javax.sql.DataSource"	ref="db2DataSource" />
+	</bean>
+	
+	<!-- DB2 DAO -->
+	<bean id="nonAcademiServiceLocator" class="ibg.nonacademics.service.MigrationServiceLocator" />
+	
+	
+	<bean id="dbUtilJdbcTestDao" class="com.common.test.DBUtilityJDBCTmpltTest" scope = "prototype"/>
+	
+	<bean id="accountProfileInfoDao" class="ibg.accountprofile.dao.AccountProfileInfoDaoImpl" scope = "prototype"/>
+	<bean id="pubPoOrdrHdrDao" class="ibg.publisher.po.order.header.dao.PublisherPoOrderHdrDaoImpl" />
+	
+	<!-- bean id="publisherServiceDao" class="ibg.publisher.publisherinformation.dao.PublisherServiceDaoImpl" scope = "prototype"/> -->
+	
+	<bean id="companyInformationDao" class="ibg.publisher.companyinformation.dao.CompanyInformationDaoImpl" scope="prototype">
+	<property name="dataSource" ref="db2DataSource" />
+	</bean>
+	
+	<bean id="pubCategoryRemainnderDao" class="ibg.publisher.summary.dao.PubCategoryRemainderDaoImpl">
+		<property name="dataSource" ref="db2DataSource" />
+	</bean>	
+	
+	<bean id="publisherServiceDao" class="ibg.publisher.publisherinformation.dao.PublisherServiceDaoImpl" scope="prototype">
+		<property name="dataSource" ref="db2DataSource" />
+	</bean>	
+	
+	<bean id="tradeClassificationCodeDao" class="ibg.publisher.tradecd.dao.TradeClassificationCodeDaoImpl" scope="prototype">
+		<property name="dataSource" ref="db2DataSource" />
+	</bean>
+	
+	<bean id="specialOfferSetupByClassOfTradeDAO" class="ibg.publisher.specialoffersetupbyclassoftrade.dao.SpecialOfferSetupByClassOfTradeDAOImpl" scope="prototype">
+		<property name="dataSource" ref="db2DataSource" />
+	</bean>
+	
+	<bean id="publisherOfferDetailDao" class="ibg.publisher.offerdetail.dao.PublisherOfferDetailDaoImpl" scope="prototype">
+		<property name="dataSource" ref="db2DataSource" />
+	</bean>
+	
+	<bean id="accountInfoDao" class="ibg.accountprofile.accountinfo.dao.AccountInfoDaoImpl" scope="prototype">
+		<property name="dataSource" ref="db2DataSource" />
+	</bean>
+	<bean id="electronicPaymentDAO" class="ibg.customer.electronicpayment.dao.ElectronicPaymentDAOImpl" scope="prototype">
+		<property name="dataSource" ref="db2DataSource" />
+	</bean>
+	
+	<!--
+	
+	
+	<bean id="companyInformationDao" class="ibg.publisher.companyinformation.dao.CompanyInformationDaoImpl">
+	<property name="dataSource" ref="db2DataSource" />
+	</bean>
+	
+	<bean id="accountInfoDao" class="ibg.accountprofile.accountinfo.dao.AccountInfoDaoImpl">
+		<property name="dataSource" ref="db2DataSource" />
+	</bean>
+	
+	<bean id="accountReturnStatusDao" class="ibg.customer.returnstatus.dao.AccountReturnStatusDaoImpl">
+		<property name="dataSource" ref="db2DataSource" />
+	</bean>
+	  
+	<bean id="tradeClassificationCodeDao" class="ibg.publisher.tradecd.dao.TradeClassificationCodeDaoImpl">
+		<property name="dataSource" ref="db2DataSource" />
+	</bean>
+	
+	
+	
+		<bean id="creditStatusDao" class="ibg.customer.creditstatus.dao.CreditStatusDaoImpl">
+		<property name="dataSource" ref="db2DataSource" />
+	</bean>
+	
+	<bean id="customerAccountProfileDao" class="ibg.customer.accountprofile.dao.CustomerAccountProfileDaoImpl">
+		<property name="dataSource" ref="db2DataSource" />
+	</bean>
+			
+	
+	
+	<bean id="electronicPaymentDAO" class="ibg.customer.electronicpayment.dao.ElectronicPaymentDAOImpl">
+		<property name="dataSource" ref="db2DataSource" />
+	</bean>
+	
+	<bean id="dispositionCodeDAO" class="ibg.publisher.dispositioncode.dao.DispositionCodeDAOImpl">
+		<property name="dataSource" ref="nonAcdmTuxedoDataSource" />
+	</bean>
+	
+		
+			
+	<bean id="publisherOfferDetailDao" class="ibg.publisher.offerdetail.dao.PublisherOfferDetailDaoImpl">
+		<property name="dataSource" ref="db2DataSource" />
+	</bean>
+	
+	<bean id="updateElectronicPaymentDao" class="ibg.customer.electronicpayment.update.dao.UpdateElectronicPaymentDaoImpl">
+		<property name="dataSource" ref="db2DataSource" />
+	</bean>
+	
+	<bean id="specialOfferSetupByClassOfTradeDAO" class="ibg.publisher.specialoffersetupbyclassoftrade.dao.SpecialOfferSetupByClassOfTradeDAOImpl">
+		<property name="dataSource" ref="nonAcdmTuxedoDataSource" />
+	</bean>
+	-->
+	<!--TUXEDO DAO  -->
+	<!-- 
+	<bean id="accountAdminDB2CallsDAO" class="ibg.administration.accountadmin.dao.AccountAdminDB2CallsDAOImpl">
+		<property name="dataSource" ref="nonAcdmTuxedoDataSource" />
+	</bean>
+	
+	<bean id="creditDetailsDAO" class="ibg.customer.creditstatus.dao.CreditDetailsDAOImpl">
+		<property name="dataSource" ref="nonAcdmTuxedoDataSource" />
+	</bean>
+	
+	<bean id="customerEPaymentDAO" class="ibg.customer.epayment.dao.CustomerEPaymentDAOImpl">
+		<property name="dataSource" ref="nonAcdmTuxedoDataSource" />
+	</bean>
+	
+	<bean id="chargeBackDao" class="ibg.publisher.publisherinformation.chargeback.dao.ChargeBackDaoImpl">
+		<property name="dataSource" ref="nonAcdmTuxedoDataSource" />
+	</bean>
+	
+	<bean id="salesDemandDistributionCenterDao" class="ibg.product.sales.demand.dao.SalesDemandDistributionCenterDaoImpl">
+		<property name="dataSource" ref="nonAcdmTuxedoDataSource" />
+	</bean>
+	
+	<bean id="salesDemandHistoryDao" class="ibg.product.sales.demand.history.dao.SalesDemandHistoryDaoImpl">
+		<property name="dataSource" ref="nonAcdmTuxedoDataSource" />
+	</bean>
+	
+	<bean id="salesDemandCommonDao" class="ibg.product.sales.demand.common.dao.SalesDemandCommonDaoImpl">
+		<property name="dataSource" ref="nonAcdmTuxedoDataSource" />
+	</bean>
+	
+	<bean id="monthlyArStatementDAO" class="ibg.customer.electronicpayment.dao.MonthlyArStatementImplDAO">
+		<property name="dataSource" ref="nonAcdmTuxedoDataSource" />
+	</bean>
+	
+	<bean id="ipsDAO" class="ibg.publisher.publisherinformation.dao.IpsDAOImpl">
+		<property name="dataSource" ref="nonAcdmTuxedoDataSource" />
+	</bean>
+	
+	<bean id="publisherAddressDAO" class="ibg.publisher.simplifiededi.service.dao.PublisherAddressDAOImpl">
+		<property name="dataSource" ref="nonAcdmTuxedoDataSource" />
+	</bean>
+	<bean id="orderStatusDao" class="ibg.customer.orderstatus.dao.OrderStatusDaoImpl">
+		<property name="dataSource" ref="nonAcdmTuxedoDataSource" />
+	</bean>		
+	
+	<bean id="purchaseOrderSummaryDao" class="ibg.customer.orderstatus.dao.PurchaseOrderSummaryDaoImpl">
+		<property name="dataSource" ref="nonAcdmTuxedoDataSource" />
+	</bean>
+	<bean id="viewQuotesDaoImpl" class="ibg.customer.orderstatus.dao.ViewQuotesDaoImpl">
+		<property name="dataSource" ref="nonAcdmTuxedoDataSource" />
+	</bean>
+	 -->
+	<!--SQL Property Reader -->
+	<!-- 
+	<bean id="sqlPropertyReader" class="ibg.common.util.SqlPropertyReader"
+		lazy-init="true" />
+
+	<bean id="sqlProps" class="ibg.lib.activity.SqlPropertyReader" />
+	 -->
+	
+	<!--  -->
+	
+	
+	
+	<!--Transaction Manager  -->
+	<bean id="nonAcdmTransactionManager"
+ 			 class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+  				<property name="dataSource" ref="db2DataSource"></property>
+  				<qualifier value="nonAcdmTx"></qualifier>
+	</bean>
+	
+	<bean id="nonAcdmTuxedoTransactionManager"
+ 			 class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+  				<property name="dataSource" ref="nonAcdmTuxedoDataSource"></property>
+  				<qualifier value="nonAcdmTuxedoTx"></qualifier>
+	</bean>
+	<!-- 
+	<bean id="nonAcdmSqlReader" class="ibg.common.util.NonAcdmSqlPropReader"></bean>
+	 -->
+	
+	<bean id="sessionUserDataImpl" class="ibg.product.search.acdm.SessionUserDataImpl"
+		scope="session" lazy-init="true">
+		<aop:scoped-proxy />
+	</bean>
+	
+	<!-- solr api conf starts -->
+	<bean id="solrServerFactory" class="solr.api.acdm.SolrJServerFactory"
+		scope="prototype">
+		<constructor-arg index="0" type="String" value="${SOLR_CORE_IPAGE}" />
+		<constructor-arg index="1" type="String"
+			value="${SEARCH_ENGINE_HOST}" />
+		<constructor-arg index="2" type="int"
+			value="${SEARCH_ENGINE_PORT}" />
+		<constructor-arg index="3" type="int" value="${SOLR_QUERY_MAX_MS}" />
+	</bean>
+	
+	<bean id="solrQry" class="ibg.product.search.acdm.SolrQueryAcdm"
+		scope="prototype">
+		<property name="params">
+			<map>
+				<entry key="facet" value="true" />
+				<entry key="facet.missing" value="false" />
+				<entry key="facet.mincount" value="1" />
+				<entry key="facet.sort" value="count" />
+			</map>
+		</property>
+	</bean>
+	
+</beans>

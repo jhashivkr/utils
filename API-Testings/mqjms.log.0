@@ -1,0 +1,490 @@
+September 22, 2015 8:23:19 AM CDT[Thread-3922] com.ibm.msg.client.wmq.internal.WMQConnection
+Exception ignored as no exception listener is registered: '
+                       Message : com.ibm.msg.client.jms.DetailedJMSException: JMSWMQ1107: A problem with this connection has occurred.
+An error has occurred with the WebSphere MQ JMS connection.
+Use the linked exception to determine the cause of this error.
+                         Class : class com.ibm.msg.client.jms.DetailedJMSException
+                         Stack : com.ibm.msg.client.wmq.common.internal.Reason.reasonToException(Reason.java:578)
+                               : com.ibm.msg.client.wmq.common.internal.Reason.createException(Reason.java:214)
+                               : com.ibm.msg.client.wmq.internal.WMQSession.connect(WMQSession.java:414)
+                               : com.ibm.msg.client.wmq.internal.WMQSession.<init>(WMQSession.java:329)
+                               : com.ibm.msg.client.wmq.internal.WMQConnection.createSession(WMQConnection.java:902)
+                               : com.ibm.msg.client.jms.internal.JmsConnectionImpl.createSession(JmsConnectionImpl.java:817)
+                               : com.ibm.msg.client.jms.internal.JmsQueueConnectionImpl.createQueueSession(JmsQueueConnectionImpl.java:112)
+                               : com.ibm.mq.jms.MQQueueConnection.createQueueSession(MQQueueConnection.java:131)
+                               : com.ibm.mq.jms.MQQueueConnection.createSession(MQQueueConnection.java:154)
+                               : org.springframework.jms.support.JmsAccessor.createSession(JmsAccessor.java:192)
+                               : org.springframework.jms.core.JmsTemplate.execute(JmsTemplate.java:485)
+                               : org.springframework.jms.core.JmsTemplate.send(JmsTemplate.java:569)
+                               : org.springframework.jms.core.JmsTemplate.send(JmsTemplate.java:560)
+                               : ibg.cc.mq.writers.MessageSender.send(MessageSender.java:68)
+                               : ibg.cc.mq.readers.MessageProcessor.doProcess(MessageProcessor.java:39)
+                               : ibg.cc.mq.readers.MessageBrowser$1.lambda$0(MessageBrowser.java:31)
+                               : java.lang.Thread.run(Thread.java:745)
+     Caused by [1] --> Message : com.ibm.mq.MQException: JMSCMQ0001: WebSphere MQ call failed with compcode '2' ('MQCC_FAILED') reason '2537' ('MQRC_CHANNEL_NOT_AVAILABLE').
+                         Class : class com.ibm.mq.MQException
+                         Stack : com.ibm.msg.client.wmq.common.internal.Reason.createException(Reason.java:202)
+                               : com.ibm.msg.client.wmq.internal.WMQSession.connect(WMQSession.java:414)
+                               : com.ibm.msg.client.wmq.internal.WMQSession.<init>(WMQSession.java:329)
+                               : com.ibm.msg.client.wmq.internal.WMQConnection.createSession(WMQConnection.java:902)
+                               : com.ibm.msg.client.jms.internal.JmsConnectionImpl.createSession(JmsConnectionImpl.java:817)
+                               : com.ibm.msg.client.jms.internal.JmsQueueConnectionImpl.createQueueSession(JmsQueueConnectionImpl.java:112)
+                               : com.ibm.mq.jms.MQQueueConnection.createQueueSession(MQQueueConnection.java:131)
+                               : com.ibm.mq.jms.MQQueueConnection.createSession(MQQueueConnection.java:154)
+                               : org.springframework.jms.support.JmsAccessor.createSession(JmsAccessor.java:192)
+                               : org.springframework.jms.core.JmsTemplate.execute(JmsTemplate.java:485)
+                               : org.springframework.jms.core.JmsTemplate.send(JmsTemplate.java:569)
+                               : org.springframework.jms.core.JmsTemplate.send(JmsTemplate.java:560)
+                               : ibg.cc.mq.writers.MessageSender.send(MessageSender.java:68)
+                               : ibg.cc.mq.readers.MessageProcessor.doProcess(MessageProcessor.java:39)
+                               : ibg.cc.mq.readers.MessageBrowser$1.lambda$0(MessageBrowser.java:31)
+                               : java.lang.Thread.run(Thread.java:745)
+     Caused by [2] --> Message : com.ibm.mq.jmqi.JmqiException: CC=2;RC=2537;AMQ9204: Connection to host 'IBAS4017.ingramcontent.com(8950)' rejected. [1=com.ibm.mq.jmqi.JmqiException[CC=2;RC=2537;AMQ9558: The remote channel 'SYSTEM.DEF.SVRCONN' on host '' is not currently available. [3=SYSTEM.DEF.SVRCONN]],3=IBAS4017.ingramcontent.com(8950),5=RemoteConnection.analyseErrorSegment]
+                         Class : class com.ibm.mq.jmqi.JmqiException
+                         Stack : com.ibm.mq.jmqi.remote.api.RemoteFAP.jmqiConnect(RemoteFAP.java:2263)
+                               : com.ibm.mq.jmqi.remote.api.RemoteFAP.jmqiConnect(RemoteFAP.java:1294)
+                               : com.ibm.mq.ese.jmqi.InterceptedJmqiImpl.jmqiConnect(InterceptedJmqiImpl.java:376)
+                               : com.ibm.mq.ese.jmqi.ESEJMQI.jmqiConnect(ESEJMQI.java:560)
+                               : com.ibm.msg.client.wmq.internal.WMQSession.connect(WMQSession.java:378)
+                               : com.ibm.msg.client.wmq.internal.WMQSession.<init>(WMQSession.java:329)
+                               : com.ibm.msg.client.wmq.internal.WMQConnection.createSession(WMQConnection.java:902)
+                               : com.ibm.msg.client.jms.internal.JmsConnectionImpl.createSession(JmsConnectionImpl.java:817)
+                               : com.ibm.msg.client.jms.internal.JmsQueueConnectionImpl.createQueueSession(JmsQueueConnectionImpl.java:112)
+                               : com.ibm.mq.jms.MQQueueConnection.createQueueSession(MQQueueConnection.java:131)
+                               : com.ibm.mq.jms.MQQueueConnection.createSession(MQQueueConnection.java:154)
+                               : org.springframework.jms.support.JmsAccessor.createSession(JmsAccessor.java:192)
+                               : org.springframework.jms.core.JmsTemplate.execute(JmsTemplate.java:485)
+                               : org.springframework.jms.core.JmsTemplate.send(JmsTemplate.java:569)
+                               : org.springframework.jms.core.JmsTemplate.send(JmsTemplate.java:560)
+                               : ibg.cc.mq.writers.MessageSender.send(MessageSender.java:68)
+                               : ibg.cc.mq.readers.MessageProcessor.doProcess(MessageProcessor.java:39)
+                               : ibg.cc.mq.readers.MessageBrowser$1.lambda$0(MessageBrowser.java:31)
+                               : java.lang.Thread.run(Thread.java:745)
+     Caused by [3] --> Message : com.ibm.mq.jmqi.JmqiException: CC=2;RC=2537;AMQ9558: The remote channel 'SYSTEM.DEF.SVRCONN' on host '' is not currently available. [3=SYSTEM.DEF.SVRCONN]
+                         Class : class com.ibm.mq.jmqi.JmqiException
+                         Stack : com.ibm.mq.jmqi.remote.impl.RemoteConnection.analyseErrorSegment(RemoteConnection.java:4285)
+                               : com.ibm.mq.jmqi.remote.impl.RemoteConnection.receiveTSH(RemoteConnection.java:3058)
+                               : com.ibm.mq.jmqi.remote.impl.RemoteConnection.initSess(RemoteConnection.java:1220)
+                               : com.ibm.mq.jmqi.remote.impl.RemoteConnection.connect(RemoteConnection.java:863)
+                               : com.ibm.mq.jmqi.remote.impl.RemoteConnectionSpecification.getSessionFromNewConnection(RemoteConnectionSpecification.java:409)
+                               : com.ibm.mq.jmqi.remote.impl.RemoteConnectionSpecification.getSession(RemoteConnectionSpecification.java:305)
+                               : com.ibm.mq.jmqi.remote.impl.RemoteConnectionPool.getSession(RemoteConnectionPool.java:146)
+                               : com.ibm.mq.jmqi.remote.api.RemoteFAP.jmqiConnect(RemoteFAP.java:1725)
+                               : com.ibm.mq.jmqi.remote.api.RemoteFAP.jmqiConnect(RemoteFAP.java:1294)
+                               : com.ibm.mq.ese.jmqi.InterceptedJmqiImpl.jmqiConnect(InterceptedJmqiImpl.java:376)
+                               : com.ibm.mq.ese.jmqi.ESEJMQI.jmqiConnect(ESEJMQI.java:560)
+                               : com.ibm.msg.client.wmq.internal.WMQSession.connect(WMQSession.java:378)
+                               : com.ibm.msg.client.wmq.internal.WMQSession.<init>(WMQSession.java:329)
+                               : com.ibm.msg.client.wmq.internal.WMQConnection.createSession(WMQConnection.java:902)
+                               : com.ibm.msg.client.jms.internal.JmsConnectionImpl.createSession(JmsConnectionImpl.java:817)
+                               : com.ibm.msg.client.jms.internal.JmsQueueConnectionImpl.createQueueSession(JmsQueueConnectionImpl.java:112)
+                               : com.ibm.mq.jms.MQQueueConnection.createQueueSession(MQQueueConnection.java:131)
+                               : com.ibm.mq.jms.MQQueueConnection.createSession(MQQueueConnection.java:154)
+                               : org.springframework.jms.support.JmsAccessor.createSession(JmsAccessor.java:192)
+                               : org.springframework.jms.core.JmsTemplate.execute(JmsTemplate.java:485)
+                               : org.springframework.jms.core.JmsTemplate.send(JmsTemplate.java:569)
+                               : org.springframework.jms.core.JmsTemplate.send(JmsTemplate.java:560)
+                               : ibg.cc.mq.writers.MessageSender.send(MessageSender.java:68)
+                               : ibg.cc.mq.readers.MessageProcessor.doProcess(MessageProcessor.java:39)
+                               : ibg.cc.mq.readers.MessageBrowser$1.lambda$0(MessageBrowser.java:31)
+                               : java.lang.Thread.run(Thread.java:745)
+'.
+
+EXPLANATION:
+An attempt was made to deliver an exception to the connections exception listener but a listener has not been registered.
+
+ACTION:
+An exception listener must be registered with the connection to receive its exceptions.
+--------------------------------------------------------------------
+September 22, 2015 8:23:19 AM CDT[Thread-4103] com.ibm.msg.client.wmq.internal.WMQConnection
+Exception ignored as no exception listener is registered: '
+                       Message : com.ibm.msg.client.jms.DetailedJMSException: JMSWMQ1107: A problem with this connection has occurred.
+An error has occurred with the WebSphere MQ JMS connection.
+Use the linked exception to determine the cause of this error.
+                         Class : class com.ibm.msg.client.jms.DetailedJMSException
+                         Stack : com.ibm.msg.client.wmq.common.internal.Reason.reasonToException(Reason.java:578)
+                               : com.ibm.msg.client.wmq.common.internal.Reason.createException(Reason.java:214)
+                               : com.ibm.msg.client.wmq.internal.WMQSession.connect(WMQSession.java:414)
+                               : com.ibm.msg.client.wmq.internal.WMQSession.<init>(WMQSession.java:329)
+                               : com.ibm.msg.client.wmq.internal.WMQConnection.createSession(WMQConnection.java:902)
+                               : com.ibm.msg.client.jms.internal.JmsConnectionImpl.createSession(JmsConnectionImpl.java:817)
+                               : com.ibm.msg.client.jms.internal.JmsQueueConnectionImpl.createQueueSession(JmsQueueConnectionImpl.java:112)
+                               : com.ibm.mq.jms.MQQueueConnection.createQueueSession(MQQueueConnection.java:131)
+                               : com.ibm.mq.jms.MQQueueConnection.createSession(MQQueueConnection.java:154)
+                               : org.springframework.jms.support.JmsAccessor.createSession(JmsAccessor.java:192)
+                               : org.springframework.jms.core.JmsTemplate.execute(JmsTemplate.java:485)
+                               : org.springframework.jms.core.JmsTemplate.send(JmsTemplate.java:569)
+                               : org.springframework.jms.core.JmsTemplate.send(JmsTemplate.java:560)
+                               : ibg.cc.mq.writers.MessageSender.send(MessageSender.java:68)
+                               : ibg.cc.mq.readers.MessageProcessor.doProcess(MessageProcessor.java:39)
+                               : ibg.cc.mq.readers.MessageBrowser$1.lambda$0(MessageBrowser.java:31)
+                               : java.lang.Thread.run(Thread.java:745)
+     Caused by [1] --> Message : com.ibm.mq.MQException: JMSCMQ0001: WebSphere MQ call failed with compcode '2' ('MQCC_FAILED') reason '2537' ('MQRC_CHANNEL_NOT_AVAILABLE').
+                         Class : class com.ibm.mq.MQException
+                         Stack : com.ibm.msg.client.wmq.common.internal.Reason.createException(Reason.java:202)
+                               : com.ibm.msg.client.wmq.internal.WMQSession.connect(WMQSession.java:414)
+                               : com.ibm.msg.client.wmq.internal.WMQSession.<init>(WMQSession.java:329)
+                               : com.ibm.msg.client.wmq.internal.WMQConnection.createSession(WMQConnection.java:902)
+                               : com.ibm.msg.client.jms.internal.JmsConnectionImpl.createSession(JmsConnectionImpl.java:817)
+                               : com.ibm.msg.client.jms.internal.JmsQueueConnectionImpl.createQueueSession(JmsQueueConnectionImpl.java:112)
+                               : com.ibm.mq.jms.MQQueueConnection.createQueueSession(MQQueueConnection.java:131)
+                               : com.ibm.mq.jms.MQQueueConnection.createSession(MQQueueConnection.java:154)
+                               : org.springframework.jms.support.JmsAccessor.createSession(JmsAccessor.java:192)
+                               : org.springframework.jms.core.JmsTemplate.execute(JmsTemplate.java:485)
+                               : org.springframework.jms.core.JmsTemplate.send(JmsTemplate.java:569)
+                               : org.springframework.jms.core.JmsTemplate.send(JmsTemplate.java:560)
+                               : ibg.cc.mq.writers.MessageSender.send(MessageSender.java:68)
+                               : ibg.cc.mq.readers.MessageProcessor.doProcess(MessageProcessor.java:39)
+                               : ibg.cc.mq.readers.MessageBrowser$1.lambda$0(MessageBrowser.java:31)
+                               : java.lang.Thread.run(Thread.java:745)
+     Caused by [2] --> Message : com.ibm.mq.jmqi.JmqiException: CC=2;RC=2537;AMQ9204: Connection to host 'IBAS4017.ingramcontent.com(8950)' rejected. [1=com.ibm.mq.jmqi.JmqiException[CC=2;RC=2537;AMQ9558: The remote channel 'SYSTEM.DEF.SVRCONN' on host '' is not currently available. [3=SYSTEM.DEF.SVRCONN]],3=IBAS4017.ingramcontent.com(8950),5=RemoteConnection.analyseErrorSegment]
+                         Class : class com.ibm.mq.jmqi.JmqiException
+                         Stack : com.ibm.mq.jmqi.remote.api.RemoteFAP.jmqiConnect(RemoteFAP.java:2263)
+                               : com.ibm.mq.jmqi.remote.api.RemoteFAP.jmqiConnect(RemoteFAP.java:1294)
+                               : com.ibm.mq.ese.jmqi.InterceptedJmqiImpl.jmqiConnect(InterceptedJmqiImpl.java:376)
+                               : com.ibm.mq.ese.jmqi.ESEJMQI.jmqiConnect(ESEJMQI.java:560)
+                               : com.ibm.msg.client.wmq.internal.WMQSession.connect(WMQSession.java:378)
+                               : com.ibm.msg.client.wmq.internal.WMQSession.<init>(WMQSession.java:329)
+                               : com.ibm.msg.client.wmq.internal.WMQConnection.createSession(WMQConnection.java:902)
+                               : com.ibm.msg.client.jms.internal.JmsConnectionImpl.createSession(JmsConnectionImpl.java:817)
+                               : com.ibm.msg.client.jms.internal.JmsQueueConnectionImpl.createQueueSession(JmsQueueConnectionImpl.java:112)
+                               : com.ibm.mq.jms.MQQueueConnection.createQueueSession(MQQueueConnection.java:131)
+                               : com.ibm.mq.jms.MQQueueConnection.createSession(MQQueueConnection.java:154)
+                               : org.springframework.jms.support.JmsAccessor.createSession(JmsAccessor.java:192)
+                               : org.springframework.jms.core.JmsTemplate.execute(JmsTemplate.java:485)
+                               : org.springframework.jms.core.JmsTemplate.send(JmsTemplate.java:569)
+                               : org.springframework.jms.core.JmsTemplate.send(JmsTemplate.java:560)
+                               : ibg.cc.mq.writers.MessageSender.send(MessageSender.java:68)
+                               : ibg.cc.mq.readers.MessageProcessor.doProcess(MessageProcessor.java:39)
+                               : ibg.cc.mq.readers.MessageBrowser$1.lambda$0(MessageBrowser.java:31)
+                               : java.lang.Thread.run(Thread.java:745)
+     Caused by [3] --> Message : com.ibm.mq.jmqi.JmqiException: CC=2;RC=2537;AMQ9558: The remote channel 'SYSTEM.DEF.SVRCONN' on host '' is not currently available. [3=SYSTEM.DEF.SVRCONN]
+                         Class : class com.ibm.mq.jmqi.JmqiException
+                         Stack : com.ibm.mq.jmqi.remote.impl.RemoteConnection.analyseErrorSegment(RemoteConnection.java:4285)
+                               : com.ibm.mq.jmqi.remote.impl.RemoteConnection.receiveTSH(RemoteConnection.java:3058)
+                               : com.ibm.mq.jmqi.remote.impl.RemoteConnection.initSess(RemoteConnection.java:1220)
+                               : com.ibm.mq.jmqi.remote.impl.RemoteConnection.connect(RemoteConnection.java:863)
+                               : com.ibm.mq.jmqi.remote.impl.RemoteConnectionSpecification.getSessionFromNewConnection(RemoteConnectionSpecification.java:409)
+                               : com.ibm.mq.jmqi.remote.impl.RemoteConnectionSpecification.getSession(RemoteConnectionSpecification.java:305)
+                               : com.ibm.mq.jmqi.remote.impl.RemoteConnectionPool.getSession(RemoteConnectionPool.java:146)
+                               : com.ibm.mq.jmqi.remote.api.RemoteFAP.jmqiConnect(RemoteFAP.java:1725)
+                               : com.ibm.mq.jmqi.remote.api.RemoteFAP.jmqiConnect(RemoteFAP.java:1294)
+                               : com.ibm.mq.ese.jmqi.InterceptedJmqiImpl.jmqiConnect(InterceptedJmqiImpl.java:376)
+                               : com.ibm.mq.ese.jmqi.ESEJMQI.jmqiConnect(ESEJMQI.java:560)
+                               : com.ibm.msg.client.wmq.internal.WMQSession.connect(WMQSession.java:378)
+                               : com.ibm.msg.client.wmq.internal.WMQSession.<init>(WMQSession.java:329)
+                               : com.ibm.msg.client.wmq.internal.WMQConnection.createSession(WMQConnection.java:902)
+                               : com.ibm.msg.client.jms.internal.JmsConnectionImpl.createSession(JmsConnectionImpl.java:817)
+                               : com.ibm.msg.client.jms.internal.JmsQueueConnectionImpl.createQueueSession(JmsQueueConnectionImpl.java:112)
+                               : com.ibm.mq.jms.MQQueueConnection.createQueueSession(MQQueueConnection.java:131)
+                               : com.ibm.mq.jms.MQQueueConnection.createSession(MQQueueConnection.java:154)
+                               : org.springframework.jms.support.JmsAccessor.createSession(JmsAccessor.java:192)
+                               : org.springframework.jms.core.JmsTemplate.execute(JmsTemplate.java:485)
+                               : org.springframework.jms.core.JmsTemplate.send(JmsTemplate.java:569)
+                               : org.springframework.jms.core.JmsTemplate.send(JmsTemplate.java:560)
+                               : ibg.cc.mq.writers.MessageSender.send(MessageSender.java:68)
+                               : ibg.cc.mq.readers.MessageProcessor.doProcess(MessageProcessor.java:39)
+                               : ibg.cc.mq.readers.MessageBrowser$1.lambda$0(MessageBrowser.java:31)
+                               : java.lang.Thread.run(Thread.java:745)
+'.
+
+EXPLANATION:
+An attempt was made to deliver an exception to the connections exception listener but a listener has not been registered.
+
+ACTION:
+An exception listener must be registered with the connection to receive its exceptions.
+--------------------------------------------------------------------
+September 22, 2015 8:23:19 AM CDT[Thread-3886] com.ibm.msg.client.wmq.internal.WMQConnection
+Exception ignored as no exception listener is registered: '
+                       Message : com.ibm.msg.client.jms.DetailedJMSException: JMSWMQ1107: A problem with this connection has occurred.
+An error has occurred with the WebSphere MQ JMS connection.
+Use the linked exception to determine the cause of this error.
+                         Class : class com.ibm.msg.client.jms.DetailedJMSException
+                         Stack : com.ibm.msg.client.wmq.common.internal.Reason.reasonToException(Reason.java:578)
+                               : com.ibm.msg.client.wmq.common.internal.Reason.createException(Reason.java:214)
+                               : com.ibm.msg.client.wmq.internal.WMQSession.connect(WMQSession.java:414)
+                               : com.ibm.msg.client.wmq.internal.WMQSession.<init>(WMQSession.java:329)
+                               : com.ibm.msg.client.wmq.internal.WMQConnection.createSession(WMQConnection.java:902)
+                               : com.ibm.msg.client.jms.internal.JmsConnectionImpl.createSession(JmsConnectionImpl.java:817)
+                               : com.ibm.msg.client.jms.internal.JmsQueueConnectionImpl.createQueueSession(JmsQueueConnectionImpl.java:112)
+                               : com.ibm.mq.jms.MQQueueConnection.createQueueSession(MQQueueConnection.java:131)
+                               : com.ibm.mq.jms.MQQueueConnection.createSession(MQQueueConnection.java:154)
+                               : org.springframework.jms.support.JmsAccessor.createSession(JmsAccessor.java:192)
+                               : org.springframework.jms.core.JmsTemplate.execute(JmsTemplate.java:485)
+                               : org.springframework.jms.core.JmsTemplate.send(JmsTemplate.java:569)
+                               : org.springframework.jms.core.JmsTemplate.send(JmsTemplate.java:560)
+                               : ibg.cc.mq.writers.MessageSender.send(MessageSender.java:68)
+                               : ibg.cc.mq.readers.MessageProcessor.doProcess(MessageProcessor.java:39)
+                               : ibg.cc.mq.readers.MessageBrowser$1.lambda$0(MessageBrowser.java:31)
+                               : java.lang.Thread.run(Thread.java:745)
+     Caused by [1] --> Message : com.ibm.mq.MQException: JMSCMQ0001: WebSphere MQ call failed with compcode '2' ('MQCC_FAILED') reason '2537' ('MQRC_CHANNEL_NOT_AVAILABLE').
+                         Class : class com.ibm.mq.MQException
+                         Stack : com.ibm.msg.client.wmq.common.internal.Reason.createException(Reason.java:202)
+                               : com.ibm.msg.client.wmq.internal.WMQSession.connect(WMQSession.java:414)
+                               : com.ibm.msg.client.wmq.internal.WMQSession.<init>(WMQSession.java:329)
+                               : com.ibm.msg.client.wmq.internal.WMQConnection.createSession(WMQConnection.java:902)
+                               : com.ibm.msg.client.jms.internal.JmsConnectionImpl.createSession(JmsConnectionImpl.java:817)
+                               : com.ibm.msg.client.jms.internal.JmsQueueConnectionImpl.createQueueSession(JmsQueueConnectionImpl.java:112)
+                               : com.ibm.mq.jms.MQQueueConnection.createQueueSession(MQQueueConnection.java:131)
+                               : com.ibm.mq.jms.MQQueueConnection.createSession(MQQueueConnection.java:154)
+                               : org.springframework.jms.support.JmsAccessor.createSession(JmsAccessor.java:192)
+                               : org.springframework.jms.core.JmsTemplate.execute(JmsTemplate.java:485)
+                               : org.springframework.jms.core.JmsTemplate.send(JmsTemplate.java:569)
+                               : org.springframework.jms.core.JmsTemplate.send(JmsTemplate.java:560)
+                               : ibg.cc.mq.writers.MessageSender.send(MessageSender.java:68)
+                               : ibg.cc.mq.readers.MessageProcessor.doProcess(MessageProcessor.java:39)
+                               : ibg.cc.mq.readers.MessageBrowser$1.lambda$0(MessageBrowser.java:31)
+                               : java.lang.Thread.run(Thread.java:745)
+     Caused by [2] --> Message : com.ibm.mq.jmqi.JmqiException: CC=2;RC=2537;AMQ9204: Connection to host 'IBAS4017.ingramcontent.com(8950)' rejected. [1=com.ibm.mq.jmqi.JmqiException[CC=2;RC=2537;AMQ9558: The remote channel 'SYSTEM.DEF.SVRCONN' on host '' is not currently available. [3=SYSTEM.DEF.SVRCONN]],3=IBAS4017.ingramcontent.com(8950),5=RemoteConnection.analyseErrorSegment]
+                         Class : class com.ibm.mq.jmqi.JmqiException
+                         Stack : com.ibm.mq.jmqi.remote.api.RemoteFAP.jmqiConnect(RemoteFAP.java:2263)
+                               : com.ibm.mq.jmqi.remote.api.RemoteFAP.jmqiConnect(RemoteFAP.java:1294)
+                               : com.ibm.mq.ese.jmqi.InterceptedJmqiImpl.jmqiConnect(InterceptedJmqiImpl.java:376)
+                               : com.ibm.mq.ese.jmqi.ESEJMQI.jmqiConnect(ESEJMQI.java:560)
+                               : com.ibm.msg.client.wmq.internal.WMQSession.connect(WMQSession.java:378)
+                               : com.ibm.msg.client.wmq.internal.WMQSession.<init>(WMQSession.java:329)
+                               : com.ibm.msg.client.wmq.internal.WMQConnection.createSession(WMQConnection.java:902)
+                               : com.ibm.msg.client.jms.internal.JmsConnectionImpl.createSession(JmsConnectionImpl.java:817)
+                               : com.ibm.msg.client.jms.internal.JmsQueueConnectionImpl.createQueueSession(JmsQueueConnectionImpl.java:112)
+                               : com.ibm.mq.jms.MQQueueConnection.createQueueSession(MQQueueConnection.java:131)
+                               : com.ibm.mq.jms.MQQueueConnection.createSession(MQQueueConnection.java:154)
+                               : org.springframework.jms.support.JmsAccessor.createSession(JmsAccessor.java:192)
+                               : org.springframework.jms.core.JmsTemplate.execute(JmsTemplate.java:485)
+                               : org.springframework.jms.core.JmsTemplate.send(JmsTemplate.java:569)
+                               : org.springframework.jms.core.JmsTemplate.send(JmsTemplate.java:560)
+                               : ibg.cc.mq.writers.MessageSender.send(MessageSender.java:68)
+                               : ibg.cc.mq.readers.MessageProcessor.doProcess(MessageProcessor.java:39)
+                               : ibg.cc.mq.readers.MessageBrowser$1.lambda$0(MessageBrowser.java:31)
+                               : java.lang.Thread.run(Thread.java:745)
+     Caused by [3] --> Message : com.ibm.mq.jmqi.JmqiException: CC=2;RC=2537;AMQ9558: The remote channel 'SYSTEM.DEF.SVRCONN' on host '' is not currently available. [3=SYSTEM.DEF.SVRCONN]
+                         Class : class com.ibm.mq.jmqi.JmqiException
+                         Stack : com.ibm.mq.jmqi.remote.impl.RemoteConnection.analyseErrorSegment(RemoteConnection.java:4285)
+                               : com.ibm.mq.jmqi.remote.impl.RemoteConnection.receiveTSH(RemoteConnection.java:3058)
+                               : com.ibm.mq.jmqi.remote.impl.RemoteConnection.initSess(RemoteConnection.java:1220)
+                               : com.ibm.mq.jmqi.remote.impl.RemoteConnection.connect(RemoteConnection.java:863)
+                               : com.ibm.mq.jmqi.remote.impl.RemoteConnectionSpecification.getSessionFromNewConnection(RemoteConnectionSpecification.java:409)
+                               : com.ibm.mq.jmqi.remote.impl.RemoteConnectionSpecification.getSession(RemoteConnectionSpecification.java:305)
+                               : com.ibm.mq.jmqi.remote.impl.RemoteConnectionPool.getSession(RemoteConnectionPool.java:146)
+                               : com.ibm.mq.jmqi.remote.api.RemoteFAP.jmqiConnect(RemoteFAP.java:1725)
+                               : com.ibm.mq.jmqi.remote.api.RemoteFAP.jmqiConnect(RemoteFAP.java:1294)
+                               : com.ibm.mq.ese.jmqi.InterceptedJmqiImpl.jmqiConnect(InterceptedJmqiImpl.java:376)
+                               : com.ibm.mq.ese.jmqi.ESEJMQI.jmqiConnect(ESEJMQI.java:560)
+                               : com.ibm.msg.client.wmq.internal.WMQSession.connect(WMQSession.java:378)
+                               : com.ibm.msg.client.wmq.internal.WMQSession.<init>(WMQSession.java:329)
+                               : com.ibm.msg.client.wmq.internal.WMQConnection.createSession(WMQConnection.java:902)
+                               : com.ibm.msg.client.jms.internal.JmsConnectionImpl.createSession(JmsConnectionImpl.java:817)
+                               : com.ibm.msg.client.jms.internal.JmsQueueConnectionImpl.createQueueSession(JmsQueueConnectionImpl.java:112)
+                               : com.ibm.mq.jms.MQQueueConnection.createQueueSession(MQQueueConnection.java:131)
+                               : com.ibm.mq.jms.MQQueueConnection.createSession(MQQueueConnection.java:154)
+                               : org.springframework.jms.support.JmsAccessor.createSession(JmsAccessor.java:192)
+                               : org.springframework.jms.core.JmsTemplate.execute(JmsTemplate.java:485)
+                               : org.springframework.jms.core.JmsTemplate.send(JmsTemplate.java:569)
+                               : org.springframework.jms.core.JmsTemplate.send(JmsTemplate.java:560)
+                               : ibg.cc.mq.writers.MessageSender.send(MessageSender.java:68)
+                               : ibg.cc.mq.readers.MessageProcessor.doProcess(MessageProcessor.java:39)
+                               : ibg.cc.mq.readers.MessageBrowser$1.lambda$0(MessageBrowser.java:31)
+                               : java.lang.Thread.run(Thread.java:745)
+'.
+
+EXPLANATION:
+An attempt was made to deliver an exception to the connections exception listener but a listener has not been registered.
+
+ACTION:
+An exception listener must be registered with the connection to receive its exceptions.
+--------------------------------------------------------------------
+September 22, 2015 8:23:19 AM CDT[Thread-3885] com.ibm.msg.client.wmq.internal.WMQConnection
+Exception ignored as no exception listener is registered: '
+                       Message : com.ibm.msg.client.jms.DetailedJMSException: JMSWMQ1107: A problem with this connection has occurred.
+An error has occurred with the WebSphere MQ JMS connection.
+Use the linked exception to determine the cause of this error.
+                         Class : class com.ibm.msg.client.jms.DetailedJMSException
+                         Stack : com.ibm.msg.client.wmq.common.internal.Reason.reasonToException(Reason.java:578)
+                               : com.ibm.msg.client.wmq.common.internal.Reason.createException(Reason.java:214)
+                               : com.ibm.msg.client.wmq.internal.WMQSession.connect(WMQSession.java:414)
+                               : com.ibm.msg.client.wmq.internal.WMQSession.<init>(WMQSession.java:329)
+                               : com.ibm.msg.client.wmq.internal.WMQConnection.createSession(WMQConnection.java:902)
+                               : com.ibm.msg.client.jms.internal.JmsConnectionImpl.createSession(JmsConnectionImpl.java:817)
+                               : com.ibm.msg.client.jms.internal.JmsQueueConnectionImpl.createQueueSession(JmsQueueConnectionImpl.java:112)
+                               : com.ibm.mq.jms.MQQueueConnection.createQueueSession(MQQueueConnection.java:131)
+                               : com.ibm.mq.jms.MQQueueConnection.createSession(MQQueueConnection.java:154)
+                               : org.springframework.jms.support.JmsAccessor.createSession(JmsAccessor.java:192)
+                               : org.springframework.jms.core.JmsTemplate.execute(JmsTemplate.java:485)
+                               : org.springframework.jms.core.JmsTemplate.send(JmsTemplate.java:569)
+                               : org.springframework.jms.core.JmsTemplate.send(JmsTemplate.java:560)
+                               : ibg.cc.mq.writers.MessageSender.send(MessageSender.java:68)
+                               : ibg.cc.mq.readers.MessageProcessor.doProcess(MessageProcessor.java:39)
+                               : ibg.cc.mq.readers.MessageBrowser$1.lambda$0(MessageBrowser.java:31)
+                               : java.lang.Thread.run(Thread.java:745)
+     Caused by [1] --> Message : com.ibm.mq.MQException: JMSCMQ0001: WebSphere MQ call failed with compcode '2' ('MQCC_FAILED') reason '2537' ('MQRC_CHANNEL_NOT_AVAILABLE').
+                         Class : class com.ibm.mq.MQException
+                         Stack : com.ibm.msg.client.wmq.common.internal.Reason.createException(Reason.java:202)
+                               : com.ibm.msg.client.wmq.internal.WMQSession.connect(WMQSession.java:414)
+                               : com.ibm.msg.client.wmq.internal.WMQSession.<init>(WMQSession.java:329)
+                               : com.ibm.msg.client.wmq.internal.WMQConnection.createSession(WMQConnection.java:902)
+                               : com.ibm.msg.client.jms.internal.JmsConnectionImpl.createSession(JmsConnectionImpl.java:817)
+                               : com.ibm.msg.client.jms.internal.JmsQueueConnectionImpl.createQueueSession(JmsQueueConnectionImpl.java:112)
+                               : com.ibm.mq.jms.MQQueueConnection.createQueueSession(MQQueueConnection.java:131)
+                               : com.ibm.mq.jms.MQQueueConnection.createSession(MQQueueConnection.java:154)
+                               : org.springframework.jms.support.JmsAccessor.createSession(JmsAccessor.java:192)
+                               : org.springframework.jms.core.JmsTemplate.execute(JmsTemplate.java:485)
+                               : org.springframework.jms.core.JmsTemplate.send(JmsTemplate.java:569)
+                               : org.springframework.jms.core.JmsTemplate.send(JmsTemplate.java:560)
+                               : ibg.cc.mq.writers.MessageSender.send(MessageSender.java:68)
+                               : ibg.cc.mq.readers.MessageProcessor.doProcess(MessageProcessor.java:39)
+                               : ibg.cc.mq.readers.MessageBrowser$1.lambda$0(MessageBrowser.java:31)
+                               : java.lang.Thread.run(Thread.java:745)
+     Caused by [2] --> Message : com.ibm.mq.jmqi.JmqiException: CC=2;RC=2537;AMQ9204: Connection to host 'IBAS4017.ingramcontent.com(8950)' rejected. [1=com.ibm.mq.jmqi.JmqiException[CC=2;RC=2537;AMQ9558: The remote channel 'SYSTEM.DEF.SVRCONN' on host '' is not currently available. [3=SYSTEM.DEF.SVRCONN]],3=IBAS4017.ingramcontent.com(8950),5=RemoteConnection.analyseErrorSegment]
+                         Class : class com.ibm.mq.jmqi.JmqiException
+                         Stack : com.ibm.mq.jmqi.remote.api.RemoteFAP.jmqiConnect(RemoteFAP.java:2263)
+                               : com.ibm.mq.jmqi.remote.api.RemoteFAP.jmqiConnect(RemoteFAP.java:1294)
+                               : com.ibm.mq.ese.jmqi.InterceptedJmqiImpl.jmqiConnect(InterceptedJmqiImpl.java:376)
+                               : com.ibm.mq.ese.jmqi.ESEJMQI.jmqiConnect(ESEJMQI.java:560)
+                               : com.ibm.msg.client.wmq.internal.WMQSession.connect(WMQSession.java:378)
+                               : com.ibm.msg.client.wmq.internal.WMQSession.<init>(WMQSession.java:329)
+                               : com.ibm.msg.client.wmq.internal.WMQConnection.createSession(WMQConnection.java:902)
+                               : com.ibm.msg.client.jms.internal.JmsConnectionImpl.createSession(JmsConnectionImpl.java:817)
+                               : com.ibm.msg.client.jms.internal.JmsQueueConnectionImpl.createQueueSession(JmsQueueConnectionImpl.java:112)
+                               : com.ibm.mq.jms.MQQueueConnection.createQueueSession(MQQueueConnection.java:131)
+                               : com.ibm.mq.jms.MQQueueConnection.createSession(MQQueueConnection.java:154)
+                               : org.springframework.jms.support.JmsAccessor.createSession(JmsAccessor.java:192)
+                               : org.springframework.jms.core.JmsTemplate.execute(JmsTemplate.java:485)
+                               : org.springframework.jms.core.JmsTemplate.send(JmsTemplate.java:569)
+                               : org.springframework.jms.core.JmsTemplate.send(JmsTemplate.java:560)
+                               : ibg.cc.mq.writers.MessageSender.send(MessageSender.java:68)
+                               : ibg.cc.mq.readers.MessageProcessor.doProcess(MessageProcessor.java:39)
+                               : ibg.cc.mq.readers.MessageBrowser$1.lambda$0(MessageBrowser.java:31)
+                               : java.lang.Thread.run(Thread.java:745)
+     Caused by [3] --> Message : com.ibm.mq.jmqi.JmqiException: CC=2;RC=2537;AMQ9558: The remote channel 'SYSTEM.DEF.SVRCONN' on host '' is not currently available. [3=SYSTEM.DEF.SVRCONN]
+                         Class : class com.ibm.mq.jmqi.JmqiException
+                         Stack : com.ibm.mq.jmqi.remote.impl.RemoteConnection.analyseErrorSegment(RemoteConnection.java:4285)
+                               : com.ibm.mq.jmqi.remote.impl.RemoteConnection.receiveTSH(RemoteConnection.java:3058)
+                               : com.ibm.mq.jmqi.remote.impl.RemoteConnection.initSess(RemoteConnection.java:1220)
+                               : com.ibm.mq.jmqi.remote.impl.RemoteConnection.connect(RemoteConnection.java:863)
+                               : com.ibm.mq.jmqi.remote.impl.RemoteConnectionSpecification.getSessionFromNewConnection(RemoteConnectionSpecification.java:409)
+                               : com.ibm.mq.jmqi.remote.impl.RemoteConnectionSpecification.getSession(RemoteConnectionSpecification.java:305)
+                               : com.ibm.mq.jmqi.remote.impl.RemoteConnectionPool.getSession(RemoteConnectionPool.java:146)
+                               : com.ibm.mq.jmqi.remote.api.RemoteFAP.jmqiConnect(RemoteFAP.java:1725)
+                               : com.ibm.mq.jmqi.remote.api.RemoteFAP.jmqiConnect(RemoteFAP.java:1294)
+                               : com.ibm.mq.ese.jmqi.InterceptedJmqiImpl.jmqiConnect(InterceptedJmqiImpl.java:376)
+                               : com.ibm.mq.ese.jmqi.ESEJMQI.jmqiConnect(ESEJMQI.java:560)
+                               : com.ibm.msg.client.wmq.internal.WMQSession.connect(WMQSession.java:378)
+                               : com.ibm.msg.client.wmq.internal.WMQSession.<init>(WMQSession.java:329)
+                               : com.ibm.msg.client.wmq.internal.WMQConnection.createSession(WMQConnection.java:902)
+                               : com.ibm.msg.client.jms.internal.JmsConnectionImpl.createSession(JmsConnectionImpl.java:817)
+                               : com.ibm.msg.client.jms.internal.JmsQueueConnectionImpl.createQueueSession(JmsQueueConnectionImpl.java:112)
+                               : com.ibm.mq.jms.MQQueueConnection.createQueueSession(MQQueueConnection.java:131)
+                               : com.ibm.mq.jms.MQQueueConnection.createSession(MQQueueConnection.java:154)
+                               : org.springframework.jms.support.JmsAccessor.createSession(JmsAccessor.java:192)
+                               : org.springframework.jms.core.JmsTemplate.execute(JmsTemplate.java:485)
+                               : org.springframework.jms.core.JmsTemplate.send(JmsTemplate.java:569)
+                               : org.springframework.jms.core.JmsTemplate.send(JmsTemplate.java:560)
+                               : ibg.cc.mq.writers.MessageSender.send(MessageSender.java:68)
+                               : ibg.cc.mq.readers.MessageProcessor.doProcess(MessageProcessor.java:39)
+                               : ibg.cc.mq.readers.MessageBrowser$1.lambda$0(MessageBrowser.java:31)
+                               : java.lang.Thread.run(Thread.java:745)
+'.
+
+EXPLANATION:
+An attempt was made to deliver an exception to the connections exception listener but a listener has not been registered.
+
+ACTION:
+An exception listener must be registered with the connection to receive its exceptions.
+--------------------------------------------------------------------
+September 22, 2015 8:23:19 AM CDT[Thread-3593] com.ibm.msg.client.wmq.internal.WMQConnection
+Exception ignored as no exception listener is registered: '
+                       Message : com.ibm.msg.client.jms.DetailedJMSException: JMSWMQ1107: A problem with this connection has occurred.
+An error has occurred with the WebSphere MQ JMS connection.
+Use the linked exception to determine the cause of this error.
+                         Class : class com.ibm.msg.client.jms.DetailedJMSException
+                         Stack : com.ibm.msg.client.wmq.common.internal.Reason.reasonToException(Reason.java:578)
+                               : com.ibm.msg.client.wmq.common.internal.Reason.createException(Reason.java:214)
+                               : com.ibm.msg.client.wmq.internal.WMQSession.connect(WMQSession.java:414)
+                               : com.ibm.msg.client.wmq.internal.WMQSession.<init>(WMQSession.java:329)
+                               : com.ibm.msg.client.wmq.internal.WMQConnection.createSession(WMQConnection.java:902)
+                               : com.ibm.msg.client.jms.internal.JmsConnectionImpl.createSession(JmsConnectionImpl.java:817)
+                               : com.ibm.msg.client.jms.internal.JmsQueueConnectionImpl.createQueueSession(JmsQueueConnectionImpl.java:112)
+                               : com.ibm.mq.jms.MQQueueConnection.createQueueSession(MQQueueConnection.java:131)
+                               : com.ibm.mq.jms.MQQueueConnection.createSession(MQQueueConnection.java:154)
+                               : org.springframework.jms.support.JmsAccessor.createSession(JmsAccessor.java:192)
+                               : org.springframework.jms.core.JmsTemplate.execute(JmsTemplate.java:485)
+                               : org.springframework.jms.core.JmsTemplate.send(JmsTemplate.java:569)
+                               : org.springframework.jms.core.JmsTemplate.send(JmsTemplate.java:560)
+                               : ibg.cc.mq.writers.MessageSender.send(MessageSender.java:68)
+                               : ibg.cc.mq.readers.MessageProcessor.doProcess(MessageProcessor.java:39)
+                               : ibg.cc.mq.readers.MessageBrowser$1.lambda$0(MessageBrowser.java:31)
+                               : java.lang.Thread.run(Thread.java:745)
+     Caused by [1] --> Message : com.ibm.mq.MQException: JMSCMQ0001: WebSphere MQ call failed with compcode '2' ('MQCC_FAILED') reason '2537' ('MQRC_CHANNEL_NOT_AVAILABLE').
+                         Class : class com.ibm.mq.MQException
+                         Stack : com.ibm.msg.client.wmq.common.internal.Reason.createException(Reason.java:202)
+                               : com.ibm.msg.client.wmq.internal.WMQSession.connect(WMQSession.java:414)
+                               : com.ibm.msg.client.wmq.internal.WMQSession.<init>(WMQSession.java:329)
+                               : com.ibm.msg.client.wmq.internal.WMQConnection.createSession(WMQConnection.java:902)
+                               : com.ibm.msg.client.jms.internal.JmsConnectionImpl.createSession(JmsConnectionImpl.java:817)
+                               : com.ibm.msg.client.jms.internal.JmsQueueConnectionImpl.createQueueSession(JmsQueueConnectionImpl.java:112)
+                               : com.ibm.mq.jms.MQQueueConnection.createQueueSession(MQQueueConnection.java:131)
+                               : com.ibm.mq.jms.MQQueueConnection.createSession(MQQueueConnection.java:154)
+                               : org.springframework.jms.support.JmsAccessor.createSession(JmsAccessor.java:192)
+                               : org.springframework.jms.core.JmsTemplate.execute(JmsTemplate.java:485)
+                               : org.springframework.jms.core.JmsTemplate.send(JmsTemplate.java:569)
+                               : org.springframework.jms.core.JmsTemplate.send(JmsTemplate.java:560)
+                               : ibg.cc.mq.writers.MessageSender.send(MessageSender.java:68)
+                               : ibg.cc.mq.readers.MessageProcessor.doProcess(MessageProcessor.java:39)
+                               : ibg.cc.mq.readers.MessageBrowser$1.lambda$0(MessageBrowser.java:31)
+                               : java.lang.Thread.run(Thread.java:745)
+     Caused by [2] --> Message : com.ibm.mq.jmqi.JmqiException: CC=2;RC=2537;AMQ9204: Connection to host 'IBAS4017.ingramcontent.com(8950)' rejected. [1=com.ibm.mq.jmqi.JmqiException[CC=2;RC=2537;AMQ9558: The remote channel 'SYSTEM.DEF.SVRCONN' on host '' is not currently available. [3=SYSTEM.DEF.SVRCONN]],3=IBAS4017.ingramcontent.com(8950),5=RemoteConnection.analyseErrorSegment]
+                         Class : class com.ibm.mq.jmqi.JmqiException
+                         Stack : com.ibm.mq.jmqi.remote.api.RemoteFAP.jmqiConnect(RemoteFAP.java:2263)
+                               : com.ibm.mq.jmqi.remote.api.RemoteFAP.jmqiConnect(RemoteFAP.java:1294)
+                               : com.ibm.mq.ese.jmqi.InterceptedJmqiImpl.jmqiConnect(InterceptedJmqiImpl.java:376)
+                               : com.ibm.mq.ese.jmqi.ESEJMQI.jmqiConnect(ESEJMQI.java:560)
+                               : com.ibm.msg.client.wmq.internal.WMQSession.connect(WMQSession.java:378)
+                               : com.ibm.msg.client.wmq.internal.WMQSession.<init>(WMQSession.java:329)
+                               : com.ibm.msg.client.wmq.internal.WMQConnection.createSession(WMQConnection.java:902)
+                               : com.ibm.msg.client.jms.internal.JmsConnectionImpl.createSession(JmsConnectionImpl.java:817)
+                               : com.ibm.msg.client.jms.internal.JmsQueueConnectionImpl.createQueueSession(JmsQueueConnectionImpl.java:112)
+                               : com.ibm.mq.jms.MQQueueConnection.createQueueSession(MQQueueConnection.java:131)
+                               : com.ibm.mq.jms.MQQueueConnection.createSession(MQQueueConnection.java:154)
+                               : org.springframework.jms.support.JmsAccessor.createSession(JmsAccessor.java:192)
+                               : org.springframework.jms.core.JmsTemplate.execute(JmsTemplate.java:485)
+                               : org.springframework.jms.core.JmsTemplate.send(JmsTemplate.java:569)
+                               : org.springframework.jms.core.JmsTemplate.send(JmsTemplate.java:560)
+                               : ibg.cc.mq.writers.MessageSender.send(MessageSender.java:68)
+                               : ibg.cc.mq.readers.MessageProcessor.doProcess(MessageProcessor.java:39)
+                               : ibg.cc.mq.readers.MessageBrowser$1.lambda$0(MessageBrowser.java:31)
+                               : java.lang.Thread.run(Thread.java:745)
+     Caused by [3] --> Message : com.ibm.mq.jmqi.JmqiException: CC=2;RC=2537;AMQ9558: The remote channel 'SYSTEM.DEF.SVRCONN' on host '' is not currently available. [3=SYSTEM.DEF.SVRCONN]
+                         Class : class com.ibm.mq.jmqi.JmqiException
+                         Stack : com.ibm.mq.jmqi.remote.impl.RemoteConnection.analyseErrorSegment(RemoteConnection.java:4285)
+                               : com.ibm.mq.jmqi.remote.impl.RemoteConnection.receiveTSH(RemoteConnection.java:3058)
+                               : com.ibm.mq.jmqi.remote.impl.RemoteConnection.initSess(RemoteConnection.java:1220)
+                               : com.ibm.mq.jmqi.remote.impl.RemoteConnection.connect(RemoteConnection.java:863)
+                               : com.ibm.mq.jmqi.remote.impl.RemoteConnectionSpecification.getSessionFromNewConnection(RemoteConnectionSpecification.java:409)
+                               : com.ibm.mq.jmqi.remote.impl.RemoteConnectionSpecification.getSession(RemoteConnectionSpecification.java:305)
+                               : com.ibm.mq.jmqi.remote.impl.RemoteConnectionPool.getSession(RemoteConnectionPool.java:146)
+                               : com.ibm.mq.jmqi.remote.api.RemoteFAP.jmqiConnect(RemoteFAP.java:1725)
+                               : com.ibm.mq.jmqi.remote.api.RemoteFAP.jmqiConnect(RemoteFAP.java:1294)
+                               : com.ibm.mq.ese.jmqi.InterceptedJmqiImpl.jmqiConnect(InterceptedJmqiImpl.java:376)
+                               : com.ibm.mq.ese.jmqi.ESEJMQI.jmqiConnect(ESEJMQI.java:560)
+                               : com.ibm.msg.client.wmq.internal.WMQSession.connect(WMQSession.java:378)
+                               : com.ibm.msg.client.wmq.internal.WMQSession.<init>(WMQSession.java:329)
+                               : com.ibm.msg.client.wmq.internal.WMQConnection.createSession(WMQConnection.java:902)
+                               : com.ibm.msg.client.jms.internal.JmsConnectionImpl.createSession(JmsConnectionImpl.java:817)
+                               : com.ibm.msg.client.jms.internal.JmsQueueConnectionImpl.createQueueSession(JmsQueueConnectionImpl.java:112)
+                               : com.ibm.mq.jms.MQQueueConnection.createQueueSession(MQQueueConnection.java:131)
+                               : com.ibm.mq.jms.MQQueueConnection.createSession(MQQueueConnection.java:154)
+                               : org.springframework.jms.support.JmsAccessor.createSession(JmsAccessor.java:192)
+                               : org.springframework.jms.core.JmsTemplate.execute(JmsTemplate.java:485)
+                               : org.springframework.jms.core.JmsTemplate.send(JmsTemplate.java:569)
+                               : org.springframework.jms.core.JmsTemplate.send(JmsTemplate.java:560)
+                               : ibg.cc.mq.writers.MessageSender.send(MessageSender.java:68)
+                               : ibg.cc.mq.readers.MessageProcessor.doProcess(MessageProcessor.java:39)
+                               : ibg.cc.mq.readers.MessageBrowser$1.lambda$0(MessageBrowser.java:31)
+                               : java.lang.Thread.run(Thread.java:745)
+'.
+
+EXPLANATION:
+An attempt was made to deliver an exception to the connections exception listener but a listener has not been registered.
+
+ACTION:
+An exception listener must be registered with the connection to receive its exceptions.
+--------------------------------------------------------------------
