@@ -262,24 +262,22 @@
 			<artifactId>spring-data-jpa</artifactId>
 			<version>1.11.11.RELEASE</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
 
-<!-- 
 		<dependency>
-			<groupId>com.ibm</groupId>
-			<artifactId>com.ibm.mqjms</artifactId>
-			<version>${webSphereMQVersion}</version>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.16.22</version>
+			<scope>provided</scope>
 		</dependency>
-		<dependency>
-			<groupId>com.ibm</groupId>
-			<artifactId>com.ibm.mq.jmqi</artifactId>
-			<version>${webSphereMQVersion}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.ibm</groupId>
-			<artifactId>com.ibm.disthub2.dhbcore</artifactId>
-			<version>${webSphereMQVersion}</version>
-		</dependency>
-		 -->
+		
+		
+		
+		
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-jms</artifactId>
