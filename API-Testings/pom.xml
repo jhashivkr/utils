@@ -37,7 +37,7 @@
 		<servlet.version>2.5</servlet.version>
 
 		<webSphereMQVersion>7.0.1</webSphereMQVersion>
-		<springJMSVersion>4.2.1.RELEASE</springJMSVersion>
+		<springJMSVersion>4.3.16.RELEASE</springJMSVersion>
 
 	</properties>
 
