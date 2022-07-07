@@ -22,7 +22,7 @@
 
 		<!-- Spring -->
 		<!-- spring.version>3.2.1.RELEASE</spring.version-->
-		<spring.version>4.1.6.RELEASE</spring.version>
+		<spring.version>5.2.21.RELEASE</spring.version>
 
 		<!-- AspectJ -->
 		<aspectj.version>1.7.4</aspectj.version>
